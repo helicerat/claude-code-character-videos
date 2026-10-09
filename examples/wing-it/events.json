@@ -1,0 +1,60 @@
+{
+  "what": "Story events for examples/wing-it, read by eye from frames of assets/wing_v.mp4 (the vertical cut of WING IT! from film 82.0 s to 112.0 s). t is seconds into the cut, film_s is the same moment in the film (82.0 + t). build/index.template.htm holds the same numbers in ITEMS, GADGETS and literal cue times; change both together.",
+  "footage": {
+    "film": "WING IT! (Blender Studio, 2023), CC BY 4.0",
+    "window_film_s": [82.0, 112.0],
+    "file": "assets/wing_v.mp4",
+    "duration_s": 29.967,
+    "shots": "shots.json"
+  },
+  "checklist": [
+    { "n": 1, "item": "SEATBELTS", "t": 1.5, "film_s": 83.5, "result": "fail", "frame": "the cat is yanked upside down out of his seat" },
+    { "n": 2, "item": "IGNITION", "t": 3.5, "film_s": 85.5, "result": "pass", "frame": "the cut to the rocket in the barn; it sits still until about 3.9 and jolts upward at 4.0" },
+    { "n": 3, "item": "LIFTOFF", "t": 5.0, "film_s": 87.0, "result": "pass", "frame": "a hole in the roof and a smoke trail; the rocket left the frame between 4.5 and 4.6, so the check comes about 0.4 s after it" },
+    { "n": 4, "item": "ALTITUDE", "t": 10.5, "film_s": 92.5, "result": "pass", "frame": "the rocket passes the moon above the clouds; no single event, a moment picked inside the ascent shot" },
+    { "n": 5, "item": "PARACHUTE", "t": 22.0, "film_s": 104.0, "result": "fail", "frame": "the umbrella is inside out; it flips between 21.6 and 21.8" },
+    { "n": 6, "item": "AIRSPACE", "t": 28.83, "film_s": 110.83, "result": "fail", "frame": "the cut to the cockpit; the rooster comes through the windshield at about 29.2" }
+  ],
+  "gadgets": [
+    { "n": 1, "name": "PLUNGER", "t": 25.0, "film_s": 107.0, "frame": "first shows at about 25.07, on top of the hull" },
+    { "n": 2, "name": "LIFE RING", "t": 25.1, "film_s": 107.1, "frame": "first shows at about 25.17, left of the hull" },
+    { "n": 3, "name": "GRAPPLING HOOK", "t": 25.5, "film_s": 107.5, "frame": "fired to the right" },
+    { "n": 4, "name": "BALLOON", "t": 25.9, "film_s": 107.9, "frame": "red, left of the hull from about 25.9" },
+    { "n": 5, "name": "EXTINGUISHER", "t": 26.0, "film_s": 108.0, "frame": "above the hull at 26.1" },
+    { "n": 6, "name": "RAFT", "t": 26.2, "film_s": 108.2, "frame": "yellow, below the hull from about 26.3" },
+    { "n": 7, "name": "BOXING GLOVE", "t": 27.5, "film_s": 109.5, "frame": "punches out of the front grille" }
+  ],
+  "cues": [
+    { "t": 0.15, "what": "checklist card slides down; the six chips follow from 0.4, 0.06 s apart", "kind": "intro" },
+    { "t": 2.75, "what": "giant 3", "kind": "countdown" },
+    { "t": 3.0, "what": "giant 2", "kind": "countdown" },
+    { "t": 3.25, "what": "giant 1", "kind": "countdown" },
+    { "t": 3.5, "what": "white flash and a shake on the IGNITION check", "kind": "flash, shake" },
+    { "t": 5.0, "what": "shake on the LIFTOFF check", "kind": "shake" },
+    { "t": 5.2, "what": "label ROOF: OPTIONAL, held 1.2 s", "kind": "label" },
+    { "t": 6.6, "what": "shake, G-force in the cockpit", "kind": "shake" },
+    { "t": 7.0, "what": "shake", "kind": "shake" },
+    { "t": 7.6, "what": "altitude meter slides in; bar and number run from 7.7 to 11.1, 0 to 12,000 FT; it leaves at 12.0 and is gone by 12.3", "kind": "meter" },
+    { "t": 12.6, "what": "warning MASTER CAUTION", "kind": "warning" },
+    { "t": 14.0, "what": "warning HULL: MOSTLY TAPE", "kind": "warning" },
+    { "t": 15.4, "what": "warning PILOT: STILL SMILING; the warnings blink every 0.5 s from 12.8 and leave at 17.5", "kind": "warning" },
+    { "t": 19.0, "what": "step card NEXT STEP / DEPLOY PARACHUTE, as a finger presses the parachute button", "kind": "card" },
+    { "t": 20.6, "what": "label ...that's an umbrella, as the umbrella opens", "kind": "label" },
+    { "t": 22.0, "what": "step card turns red: RESULT / PARACHUTE: FAILED, with a shake", "kind": "card, shake" },
+    { "t": 23.2, "what": "giant PLAN B over the screaming cat", "kind": "label" },
+    { "t": 24.8, "what": "EMERGENCY GADGETS counter comes in at 0; each gadget sets it and adds a chip", "kind": "counter" },
+    { "t": 28.6, "what": "gadget counter and chips fade out", "kind": "counter" },
+    { "t": 28.83, "what": "flash, shake and a BIRD STRIKE tape on the AIRSPACE check", "kind": "flash, shake, tape" },
+    { "t": 29.86, "what": "tape fades out", "kind": "tape" },
+    { "t": 29.92, "what": "the last frame of the footage (assets/last.jpg) is shown as a still", "kind": "outro" },
+    { "t": 29.96, "what": "footage ends; a dark shade fades in; CHECKLIST 3/6, GADGETS 7, BIRDS 1 and nobody told them about the umbrella come in at 30.16, 30.41, 30.66 and 30.96", "kind": "outro" },
+    { "t": 32.5, "what": "end", "kind": "end" }
+  ],
+  "sound": {
+    "file": "assets/wing_a.mp3",
+    "film_s": [82.0, 114.5],
+    "ducked": { "t": [19.8, 22.3], "film_s": [101.8, 104.3], "volume": 0.12, "why": "a shouted swear at film 1:42 to 1:44" },
+    "fade_out": { "t": 31.0, "duration_s": 1.5 }
+  },
+  "checked": "Every checklist time and every gadget time was checked afterwards with frame grabs of assets/wing_v.mp4; what each frame shows is in the frame fields. Gadget marks land within about 0.1 s of the frame where each gadget first shows."
+}

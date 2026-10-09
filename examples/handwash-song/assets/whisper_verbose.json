@@ -1,0 +1,207 @@
+{
+ "task": "transcribe",
+ "language": "English",
+ "duration": 30.89268736,
+ "text": " Wash and sell each day to keep germs away. Scrub with soap and water and be on your way. Wash and sell each day to keep germs away. Scrub with soap and water and be on your way. you",
+ "words": [
+  {
+   "word": "Wash",
+   "start": 2.98,
+   "end": 3.14
+  },
+  {
+   "word": "and",
+   "start": 3.14,
+   "end": 3.84
+  },
+  {
+   "word": "sell",
+   "start": 3.84,
+   "end": 4.3
+  },
+  {
+   "word": "each",
+   "start": 4.3,
+   "end": 4.78
+  },
+  {
+   "word": "day",
+   "start": 4.78,
+   "end": 5.34
+  },
+  {
+   "word": "to",
+   "start": 5.34,
+   "end": 6.04
+  },
+  {
+   "word": "keep",
+   "start": 6.04,
+   "end": 6.7
+  },
+  {
+   "word": "germs",
+   "start": 6.7,
+   "end": 7.2
+  },
+  {
+   "word": "away.",
+   "start": 7.2,
+   "end": 8.06
+  },
+  {
+   "word": "Scrub",
+   "start": 8.7,
+   "end": 9.06
+  },
+  {
+   "word": "with",
+   "start": 9.06,
+   "end": 9.52
+  },
+  {
+   "word": "soap",
+   "start": 9.52,
+   "end": 10.06
+  },
+  {
+   "word": "and",
+   "start": 10.06,
+   "end": 10.44
+  },
+  {
+   "word": "water",
+   "start": 10.44,
+   "end": 11.14
+  },
+  {
+   "word": "and",
+   "start": 11.14,
+   "end": 11.96
+  },
+  {
+   "word": "be",
+   "start": 11.96,
+   "end": 12.3
+  },
+  {
+   "word": "on",
+   "start": 12.3,
+   "end": 12.82
+  },
+  {
+   "word": "your",
+   "start": 12.82,
+   "end": 13.22
+  },
+  {
+   "word": "way.",
+   "start": 13.22,
+   "end": 13.66
+  },
+  {
+   "word": "Wash",
+   "start": 14.36,
+   "end": 14.7
+  },
+  {
+   "word": "and",
+   "start": 14.7,
+   "end": 15.18
+  },
+  {
+   "word": "sell",
+   "start": 15.18,
+   "end": 15.62
+  },
+  {
+   "word": "each",
+   "start": 15.62,
+   "end": 15.98
+  },
+  {
+   "word": "day",
+   "start": 15.98,
+   "end": 16.56
+  },
+  {
+   "word": "to",
+   "start": 16.56,
+   "end": 17.24
+  },
+  {
+   "word": "keep",
+   "start": 17.24,
+   "end": 17.8
+  },
+  {
+   "word": "germs",
+   "start": 17.8,
+   "end": 18.3
+  },
+  {
+   "word": "away.",
+   "start": 18.3,
+   "end": 18.96
+  },
+  {
+   "word": "Scrub",
+   "start": 19.72,
+   "end": 20.08
+  },
+  {
+   "word": "with",
+   "start": 20.08,
+   "end": 20.48
+  },
+  {
+   "word": "soap",
+   "start": 20.48,
+   "end": 20.96
+  },
+  {
+   "word": "and",
+   "start": 20.96,
+   "end": 21.42
+  },
+  {
+   "word": "water",
+   "start": 21.42,
+   "end": 21.98
+  },
+  {
+   "word": "and",
+   "start": 21.98,
+   "end": 22.8
+  },
+  {
+   "word": "be",
+   "start": 22.8,
+   "end": 23.16
+  },
+  {
+   "word": "on",
+   "start": 23.16,
+   "end": 23.66
+  },
+  {
+   "word": "your",
+   "start": 23.66,
+   "end": 24.1
+  },
+  {
+   "word": "way.",
+   "start": 24.1,
+   "end": 24.48
+  },
+  {
+   "word": "you",
+   "start": 30.16,
+   "end": 30.22
+  }
+ ],
+ "segments": null,
+ "x_groq": {
+  "id": "req_01m4g8dfw3erv9q0h21m0f5gkx"
+ }
+}

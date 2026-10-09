@@ -1,0 +1,6 @@
+# Same line endings on every OS, whatever core.autocrlf says.
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.jpg binary
+*.mp4 binary

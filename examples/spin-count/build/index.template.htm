@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #1a1033; }
+  #root { width: 100%; height: 100%; position: relative; font-family: Poppins, sans-serif; color: #fff; }
+  .clip { position: absolute; inset: 0; }
+  #footage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+  #topshade { position: absolute; left: 0; top: 0; width: 1080px; height: 520px;
+              background: linear-gradient(180deg, rgba(26,16,51,.55) 0%, rgba(26,16,51,.25) 60%, rgba(26,16,51,0) 100%); }
+  .pill { position: absolute; top: 120px; width: 84px; height: 84px; border-radius: 50%; background: rgba(255,255,255,.92);
+          border: 4px dashed #c9bfe6; box-sizing: border-box; }
+  .pill-n { position: absolute; left: 0; top: 0; width: 76px; height: 76px; line-height: 76px; text-align: center;
+            font-family: Poppins, sans-serif; font-weight: 800; font-size: 38px; color: #b6abd3; }
+  #title { position: absolute; left: 0; top: 236px; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 900;
+           font-size: 92px; line-height: 1; letter-spacing: -.01em; color: #fff; text-shadow: 0 6px 0 #3b1f7a, 0 10px 30px rgba(0,0,0,.35); }
+  .tw { display: inline-block; margin: 0 14px; }
+  #sub { position: absolute; left: 0; top: 346px; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 700;
+         font-size: 36px; color: #fff; opacity: .92; text-shadow: 0 3px 12px rgba(0,0,0,.45); }
+
+  .big { position: absolute; left: 290px; top: 760px; width: 500px; height: 440px; line-height: 440px; text-align: center;
+         font-family: Poppins, sans-serif; font-weight: 900; font-size: 400px; color: #ffd23f;
+         -webkit-text-stroke: 16px #3b1f7a; paint-order: stroke fill; opacity: 0; }
+
+  .sticker { position: absolute; left: 140px; top: 1430px; width: 800px; height: 170px; line-height: 170px; text-align: center;
+             font-family: Poppins, sans-serif; font-weight: 900; font-size: 120px; color: #fff; -webkit-text-stroke: 12px #3b1f7a;
+             paint-order: stroke fill; opacity: 0; }
+
+  #progress { position: absolute; left: 60px; top: 1830px; width: 960px; height: 14px; border-radius: 7px; background: rgba(255,255,255,.35); overflow: hidden; }
+  #progress-fill { position: absolute; left: 0; top: 0; width: 960px; height: 14px; background: #ffd23f; transform-origin: 0 50%; }
+  #credit { position: absolute; left: 60px; top: 1860px; width: 960px; font-family: Inter, sans-serif; font-weight: 500; font-size: 19px;
+            color: rgba(255,255,255,.8); text-shadow: 0 1px 4px rgba(0,0,0,.5); }
+
+  #outro { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: #1a1033; opacity: 0; z-index: 1; }
+  #pills { position: absolute; left: 0; top: 0; z-index: 2; }
+  #outro-big { position: absolute; left: 0; top: 700px; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 900;
+               font-size: 300px; line-height: 1; color: #ffd23f; -webkit-text-stroke: 14px #3b1f7a; paint-order: stroke fill; }
+  #outro-line { position: absolute; left: 0; top: 1030px; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 800;
+                font-size: 78px; line-height: 1.1; color: #fff; }
+  #outro-cta { position: absolute; left: 0; top: 1250px; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 700;
+               font-size: 48px; color: #c9bfe6; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="21.5" data-width="1080" data-height="1920">
+  <video id="footage" src="assets/boy.mp4" data-start="0" data-duration="19.66" data-track-index="0" muted playsinline></video>
+  <audio id="music" src="assets/music_cut.mp3" data-start="0" data-duration="21.5" data-track-index="1" data-volume="0.9" data-timeline-role="music"></audio>
+
+  <section id="overlay" class="clip" data-start="0" data-duration="21.5" data-track-index="2">
+    <div id="topshade"></div>
+    <div id="pills"></div>
+    <div id="title"><span class="tw">Count</span><span class="tw">the</span><span class="tw">spins!</span></div>
+    <div id="sub">he doesn't stop for 20 seconds</div>
+    <div id="bigs"></div>
+    <div id="stickers"></div>
+    <div id="progress"><div id="progress-fill"></div></div>
+    <div id="credit">Footage: TonyDias7 / Pixabay · Music: AudioCoffee / Pixabay · Edit: HTML + GSAP, rendered with HyperFrames</div>
+    <div id="outro">
+      <div id="outro-big">10</div>
+      <div id="outro-line">spins in 20 seconds</div>
+      <div id="outro-cta">how many did you count?</div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Spin peaks: frames where his back faces the camera, read by eye in the source clip (seconds),
+  // divided by 0.85 because assets/boy.mp4 plays the clip at 0.85x. Same numbers as spins.json.
+  const SPINS = [1.9, 4.2, 6.1, 7.4, 8.8, 10.1, 11.8, 14.0, 15.1, 16.2].map(t => +(t / 0.85).toFixed(2));
+  // Beat grid from `npx hyperframes beats` (music_cut.mp3), every 0.3185 s. The beat file's mean
+  // spacing is 0.3191 s (188 bpm), so by the last title pulse this grid runs 0.04 s early.
+  const BEAT0 = 0.22, BEAT = 0.3185;
+  const END = 21.5, VIDEO_END = 19.66;
+  const N = SPINS.length;
+
+  const PILL = 84, GAP = 12, X0 = (1080 - (N * PILL + (N - 1) * GAP)) / 2, PILL_Y = 120;
+  const pills = document.getElementById('pills'), bigs = document.getElementById('bigs'), stickers = document.getElementById('stickers');
+  const STICK = ['SPIN!', 'AGAIN!', 'WHOOSH!', 'SPIN!', 'NO WAY', 'SPIN!', 'KEEP GOING', 'SPIN!', 'ALMOST', 'TEN!'];
+  for (let i = 0; i < N; i++) {
+    const p = document.createElement('div'); p.className = 'pill'; p.id = 'p' + i; p.style.left = (X0 + i * (PILL + GAP)) + 'px';
+    p.innerHTML = `<div class="pill-n" id="pn${i}">${i + 1}</div>`; pills.appendChild(p);
+    const b = document.createElement('div'); b.className = 'big'; b.id = 'g' + i; b.textContent = String(i + 1); bigs.appendChild(b);
+    const s = document.createElement('div'); s.className = 'sticker'; s.id = 's' + i; s.textContent = STICK[i]; stickers.appendChild(s);
+  }
+
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+
+  tl.fromTo('#topshade', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+  tl.fromTo('.pill', { scale: 0 }, { scale: 1, duration: 0.35, ease: 'back.out(2.4)', stagger: 0.05 }, 0.1);
+  gsap.utils.toArray('.tw').forEach((el, i) => tl.fromTo(el, { y: 60, opacity: 0, scale: 0.6 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2)' }, 0.35 + i * 0.12));
+  tl.fromTo('#sub', { opacity: 0, y: 16 }, { opacity: 0.92, y: 0, duration: 0.3 }, 0.9);
+
+  for (let t = BEAT0; t < VIDEO_END - 0.2; t += BEAT * 2) {
+    tl.to('#title', { scale: 1.045, duration: 0.07, ease: 'power2.out' }, t);
+    tl.to('#title', { scale: 1, duration: 0.2, ease: 'power2.inOut' }, t + 0.07);
+  }
+
+  SPINS.forEach((t, i) => {
+    const px = X0 + i * (PILL + GAP) + PILL / 2, py = PILL_Y + PILL / 2;
+    const dx = px - 540, dy = py - 980;
+    tl.fromTo('#g' + i, { opacity: 1, scale: 0, x: 0, y: 0, rotation: -12 }, { scale: 1, rotation: 0, duration: 0.22, ease: 'back.out(2.6)' }, t - 0.12);
+    tl.to('#g' + i, { x: dx, y: dy, scale: 0.17, duration: 0.42, ease: 'power3.in' }, t + 0.22);
+    tl.set('#g' + i, { opacity: 0 }, t + 0.64);
+    tl.to('#p' + i, { backgroundColor: '#ffd23f', borderColor: '#3b1f7a', borderStyle: 'solid', duration: 0.1 }, t + 0.64);
+    tl.to('#pn' + i, { color: '#3b1f7a', duration: 0.1 }, t + 0.64);
+    // A plain to(), not fromTo({ scale: 1 }): a fromTo applies its from-state when it is created, which
+    // would show every pill at full size before the intro pops it in from scale 0.
+    tl.to('#p' + i, { scale: 1.3, duration: 0.1, ease: 'power2.out', yoyo: true, repeat: 1 }, t + 0.64);
+    const rot = i % 2 ? 8 : -8;
+    tl.fromTo('#s' + i, { opacity: 0, scale: 0.2, rotation: rot * 2 }, { opacity: 1, scale: 1, rotation: rot, duration: 0.2, ease: 'back.out(3)' }, t - 0.05);
+    tl.to('#s' + i, { opacity: 0, scale: 1.25, duration: 0.2, ease: 'power1.in' }, t + 0.55);
+  });
+
+  tl.fromTo('#progress-fill', { scaleX: 0 }, { scaleX: 1, duration: END, ease: 'none' }, 0);
+
+  tl.to(['#title', '#sub'], { opacity: 0, duration: 0.2 }, VIDEO_END - 0.3);
+  tl.fromTo('#outro', { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, VIDEO_END - 0.15);
+  tl.fromTo('#outro-big', { scale: 0 }, { scale: 1, duration: 0.4, ease: 'back.out(2.2)' }, VIDEO_END + 0.05);
+  tl.fromTo('#outro-line', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3 }, VIDEO_END + 0.3);
+  tl.fromTo('#outro-cta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3 }, VIDEO_END + 0.6);
+  tl.to('.pill', { y: -14, duration: 0.15, ease: 'power2.out', yoyo: true, repeat: 1, stagger: 0.06 }, VIDEO_END + 0.5);
+
+  tl.to({}, { duration: END }, 0);
+  window.__timelines.main = tl;
+</script>
+</body>
+</html>

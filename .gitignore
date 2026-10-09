@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+
+# Secrets (GROQ_API_KEY and friends)
+.env
+.env.*
+
+# Media and libraries that scripts/fetch-assets.mjs, fetch-spin-assets.mjs and
+# fetch-wing-assets.mjs download or make, frame grabs and contact sheets, and
+# generated media (character images, keyframes, song takes, scene clips) in any
+# subfolder of assets/. The CDC source clip, the Pixabay clip and track, the
+# WING IT! film (assets/source/), and everything cut from them stay out of git.
+examples/*/assets/**/*.mp4
+examples/*/assets/**/*.mov
+examples/*/assets/**/*.webm
+examples/*/assets/**/*.mp3
+examples/*/assets/**/*.wav
+examples/*/assets/**/*.m4a
+examples/*/assets/**/*.png
+examples/*/assets/**/*.jpg
+examples/*/assets/**/*.jpeg
+examples/*/assets/**/*.webp
+examples/*/assets/**/*.part
+examples/*/assets/gsap.min.js
+
+# Small text files that ARE committed (listed so a broader rule never hides them)
+!examples/*/assets/.gitkeep
+!examples/*/assets/whisper_verbose.json
+!examples/*/transcript.json
+!examples/*/lyrics.txt
+!examples/*/spins.json
+!examples/*/shots.json
+!examples/*/events.json
+!examples/*/beats/**/*.json
+!examples/*/index.html
+
+# Render output, snapshots, logs
+renders/
+snapshots/
+renders_log.txt
+*.log
+
+# HyperFrames caches created inside a project folder
+.hyperframes/
+.thumbnails/
+.media/
+.transcode-cache/
+.debug/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Media generated from a prompt pasted at the repo root by mistake
+/assets/

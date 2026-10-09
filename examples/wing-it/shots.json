@@ -1,0 +1,29 @@
+{
+  "what": "The vertical cut of WING IT! for examples/wing-it: film 82.0 s to 112.0 s in 12 shots, each with its own 9:16 crop. scripts/fetch-wing-assets.mjs reads this file and builds assets/wing_v.mp4 from it, so a change here changes the footage. start_s and end_s are film times; the cut points are the film's own cuts.",
+  "source": {
+    "file": "assets/source/WING_IT_-_Blender_Open_Movie-full_movie.webm",
+    "size": "1920x1080",
+    "fps": 24
+  },
+  "crop": {
+    "width": 608,
+    "height": 1080,
+    "x": "x = floor(min(max(center_x * 1920 - 304, 0), 1312)), the left edge of a 608 px window centered on center_x (a fraction of the frame width)",
+    "out": "scaled to 1080x1920 with lanczos, 30 fps, sample aspect ratio 1"
+  },
+  "wide": "A shot with center_x \"wide\" keeps the whole frame: it is scaled to 1080x608 (lanczos) and laid over a blurred, darkened copy of itself that is scaled to cover 1080x1920 (scale=-2:1920, crop=1080:1920, boxblur=20:2, eq=brightness=-0.12), at y 656, so the card sits in the middle of the frame.",
+  "shots": [
+    { "n": 1, "start_s": 82.0, "end_s": 84.04, "center_x": 0.48, "x": 617, "shows": "the cat with his checklist, then yanked upside down" },
+    { "n": 2, "start_s": 84.04, "end_s": 85.5, "center_x": 0.47, "x": 598, "shows": "the dog in his orange suit, shouting" },
+    { "n": 3, "start_s": 85.5, "end_s": 88.58, "center_x": 0.6, "x": 848, "shows": "the rocket in the barn jolts and goes through the roof" },
+    { "n": 4, "start_s": 88.58, "end_s": 89.62, "center_x": 0.5, "x": 656, "shows": "the dog in the cockpit under G-force" },
+    { "n": 5, "start_s": 89.62, "end_s": 94.21, "center_x": 0.45, "x": 560, "shows": "the rocket climbs past the clouds and the moon" },
+    { "n": 6, "start_s": 94.21, "end_s": 99.62, "center_x": 0.47, "x": 598, "shows": "the red-lit cockpit, dog and cat" },
+    { "n": 7, "start_s": 99.62, "end_s": 101.0, "center_x": 0.4, "x": 464, "shows": "the cat from behind, reaching for the controls" },
+    { "n": 8, "start_s": 101.0, "end_s": 102.0, "center_x": 0.5, "x": 656, "shows": "a finger presses the parachute button" },
+    { "n": 9, "start_s": 102.0, "end_s": 104.29, "center_x": 0.5, "x": 656, "shows": "an umbrella opens over the hull and turns inside out" },
+    { "n": 10, "start_s": 104.29, "end_s": 107.0, "center_x": 0.5, "x": 656, "shows": "the cat screams" },
+    { "n": 11, "start_s": 107.0, "end_s": 110.83, "center_x": "wide", "x": null, "shows": "the hull throws out seven gadgets across the whole width of the frame, so it stays 16:9" },
+    { "n": 12, "start_s": 110.83, "end_s": 112.0, "center_x": 0.6, "x": 848, "shows": "the cockpit; a rooster comes through the windshield" }
+  ]
+}

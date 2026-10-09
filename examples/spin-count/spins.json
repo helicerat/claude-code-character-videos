@@ -1,0 +1,80 @@
+{
+  "what": "Spin marks for examples/spin-count: the moments his back faces the camera, read by eye from frames of the source clip. build/index.template.htm holds the same numbers in SPINS; change both together.",
+  "clip": {
+    "page": "https://pixabay.com/videos/boy-child-kid-childhood-dancing-313047/",
+    "file": "assets/source/313047_large.mp4",
+    "fps": 24,
+    "duration_s": 16.708
+  },
+  "slowdown": {
+    "factor": 0.85,
+    "footage": "assets/boy.mp4",
+    "duration_s": 19.667,
+    "rule": "time in boy.mp4 = source time / 0.85, rounded to 0.01 s"
+  },
+  "marks": [
+    {
+      "n": 1,
+      "source_s": 1.9,
+      "footage_s": 2.24,
+      "note": "at this frame he is in profile, mid-turn; his back is to the camera from about 0.3 s later in boy.mp4"
+    },
+    {
+      "n": 2,
+      "source_s": 4.2,
+      "footage_s": 4.94
+    },
+    {
+      "n": 3,
+      "source_s": 6.1,
+      "footage_s": 7.18
+    },
+    {
+      "n": 4,
+      "source_s": 7.4,
+      "footage_s": 8.71,
+      "note": "at this frame he is in profile, mid-turn"
+    },
+    {
+      "n": 5,
+      "source_s": 8.8,
+      "footage_s": 10.35
+    },
+    {
+      "n": 6,
+      "source_s": 10.1,
+      "footage_s": 11.88
+    },
+    {
+      "n": 7,
+      "source_s": 11.8,
+      "footage_s": 13.88
+    },
+    {
+      "n": 8,
+      "source_s": 14,
+      "footage_s": 16.47
+    },
+    {
+      "n": 9,
+      "source_s": 15.1,
+      "footage_s": 17.76
+    },
+    {
+      "n": 10,
+      "source_s": 16.2,
+      "footage_s": 19.06
+    }
+  ],
+  "unmarked": {
+    "note": "A second pass over the source at 4 and then 12 frames per second found two more moments with his back to the camera, each with his face visible between it and the nearest mark. The edit does not count them. Read strictly by the rule above, the clip has 12.",
+    "source_s": [
+      1.35,
+      13.3
+    ],
+    "footage_s": [
+      1.59,
+      15.65
+    ]
+  }
+}

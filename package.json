@@ -1,0 +1,44 @@
+{
+  "name": "claude-code-character-videos",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Make a short vertical video with an AI character, driven by Claude Code: idea, character, song or voice, animation, word timings, a motion-graphics edit written as HTML + GSAP, and a HyperFrames render.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helicerat/claude-code-character-videos.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "fetch": "node scripts/fetch-assets.mjs examples/handwash-song",
+    "transcribe": "node scripts/transcribe-groq.mjs examples/handwash-song/assets/song.mp3 examples/handwash-song/assets/whisper_verbose.json --force",
+    "align": "node scripts/align-lyrics.mjs examples/handwash-song",
+    "build": "node scripts/build.mjs examples/handwash-song",
+    "lint": "npx hyperframes@0.8.143 lint examples/handwash-song",
+    "preview": "npx hyperframes@0.8.143 preview examples/handwash-song",
+    "render": "npm run render:raw && npm run fix-edge",
+    "render:raw": "npx hyperframes@0.8.143 render examples/handwash-song -q delivery -o examples/handwash-song/renders/handwash-song.raw.mp4",
+    "fix-edge": "node scripts/fix-right-edge.mjs examples/handwash-song/renders/handwash-song.raw.mp4 examples/handwash-song/renders/handwash-song.mp4",
+    "probe": "node scripts/probe.mjs examples/handwash-song/assets/cat.mp4 examples/handwash-song/assets/song.mp3 examples/handwash-song/renders/handwash-song.raw.mp4 examples/handwash-song/renders/handwash-song.mp4",
+    "fetch:spin": "node scripts/fetch-spin-assets.mjs examples/spin-count",
+    "build:spin": "node scripts/build.mjs examples/spin-count",
+    "lint:spin": "npx hyperframes@0.8.143 lint examples/spin-count",
+    "preview:spin": "npx hyperframes@0.8.143 preview examples/spin-count",
+    "render:spin": "npm run render:spin:raw && npm run fix-edge:spin",
+    "render:spin:raw": "npx hyperframes@0.8.143 render examples/spin-count -q delivery -o examples/spin-count/renders/spin.raw.mp4",
+    "fix-edge:spin": "node scripts/fix-right-edge.mjs examples/spin-count/renders/spin.raw.mp4 examples/spin-count/renders/spin.mp4",
+    "probe:spin": "node scripts/probe.mjs examples/spin-count/assets/boy.mp4 examples/spin-count/assets/music_cut.mp3 examples/spin-count/renders/spin.raw.mp4 examples/spin-count/renders/spin.mp4",
+    "fetch:wing": "node scripts/fetch-wing-assets.mjs examples/wing-it",
+    "build:wing": "node scripts/build.mjs examples/wing-it",
+    "lint:wing": "npx hyperframes@0.8.143 lint examples/wing-it",
+    "preview:wing": "npx hyperframes@0.8.143 preview examples/wing-it",
+    "render:wing": "npm run render:wing:raw && npm run fix-edge:wing",
+    "render:wing:raw": "npx hyperframes@0.8.143 render examples/wing-it -q delivery -o examples/wing-it/renders/wing-it.raw.mp4",
+    "fix-edge:wing": "node scripts/fix-right-edge.mjs examples/wing-it/renders/wing-it.raw.mp4 examples/wing-it/renders/wing-it.mp4",
+    "probe:wing": "node scripts/probe.mjs examples/wing-it/assets/wing_v.mp4 examples/wing-it/assets/wing_a.mp3 examples/wing-it/renders/wing-it.raw.mp4 examples/wing-it/renders/wing-it.mp4",
+    "check-links": "node scripts/check-links.mjs"
+  }
+}

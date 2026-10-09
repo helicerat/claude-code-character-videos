@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #0f1226; }
+  #root { width: 100%; height: 100%; position: relative; font-family: Poppins, sans-serif; color: #fff; }
+  .clip { position: absolute; inset: 0; }
+  #footage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  #still { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0; }
+
+  /* checklist */
+  #card { position: absolute; left: 32px; top: 40px; width: 1016px; height: 286px; border-radius: 30px; background: rgba(255,255,255,.93);
+          box-shadow: 0 14px 40px rgba(0,0,0,.35); }
+  #card-title { position: absolute; left: 60px; top: 34px; font-family: Inter, sans-serif; font-weight: 700; font-size: 26px; letter-spacing: .16em; color: #6b6f86; }
+  #score { position: absolute; left: 700px; top: 14px; width: 280px; height: 64px; line-height: 64px; text-align: right; font-family: Poppins, sans-serif; font-weight: 900; font-size: 44px; color: #1b1e3a; z-index: 3; }
+  .chip { position: absolute; width: 316px; height: 74px; border-radius: 37px; background: #eef0f6; }
+  .chip-dot { position: absolute; left: 12px; top: 12px; width: 50px; height: 50px; border-radius: 25px; background: #ffffff; border: 4px solid #c9cdda; box-sizing: border-box;
+              font-family: Poppins, sans-serif; font-weight: 900; font-size: 30px; line-height: 42px; text-align: center; color: transparent; }
+  .chip-t { position: absolute; left: 76px; top: 0; height: 74px; line-height: 74px; font-family: Poppins, sans-serif; font-weight: 800; font-size: 27px; color: #1b1e3a; letter-spacing: .01em; }
+
+  /* center pops */
+  .giant { position: absolute; left: 140px; top: 640px; width: 800px; height: 460px; line-height: 460px; text-align: center; font-family: Poppins, sans-serif; font-weight: 900;
+           font-size: 400px; color: #ffd23f; -webkit-text-stroke: 16px #1b1e3a; paint-order: stroke fill; opacity: 0; }
+  .label { position: absolute; left: 60px; top: 1330px; width: 960px; text-align: center; font-family: Poppins, sans-serif; font-weight: 900; font-size: 84px; line-height: 1.05;
+           color: #fff; -webkit-text-stroke: 10px #1b1e3a; paint-order: stroke fill; opacity: 0; }
+  #flash { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: #fff; opacity: 0; }
+
+  /* altitude meter */
+  #alt { position: absolute; left: 930px; top: 520px; width: 110px; height: 860px; opacity: 0; }
+  #alt-bar { position: absolute; left: 34px; top: 0; width: 42px; height: 760px; border-radius: 21px; background: rgba(255,255,255,.35); overflow: hidden; }
+  #alt-fill { position: absolute; left: 0; top: 0; width: 42px; height: 760px; background: #ffd23f; transform-origin: 50% 100%; }
+  #alt-num { position: absolute; left: -170px; top: 790px; width: 280px; text-align: right; font-family: Poppins, sans-serif; font-weight: 900; font-size: 46px;
+             color: #fff; text-shadow: 0 3px 12px rgba(0,0,0,.6); }
+
+  /* warnings */
+  .warn { position: absolute; left: 44px; height: 70px; line-height: 70px; padding: 0 30px; border-radius: 14px; background: #e5322d; color: #fff;
+          font-family: Poppins, sans-serif; font-weight: 900; font-size: 34px; letter-spacing: .04em; opacity: 0; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+
+  /* step card */
+  #step { position: absolute; left: 60px; top: 1540px; width: 960px; height: 150px; border-radius: 28px; background: #1b1e3a; opacity: 0; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+  #step-k { position: absolute; left: 40px; top: 22px; font-family: Inter, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: .16em; color: #9aa0c3; }
+  #step-t { position: absolute; left: 40px; top: 56px; font-family: Poppins, sans-serif; font-weight: 900; font-size: 58px; color: #fff; }
+
+  /* gadgets */
+  #gad-head { position: absolute; left: 60px; top: 372px; font-family: Inter, sans-serif; font-weight: 700; font-size: 28px; letter-spacing: .16em; color: #fff; opacity: 0;
+              text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+  #gad-n { position: absolute; left: 60px; top: 404px; font-family: Poppins, sans-serif; font-weight: 900; font-size: 200px; line-height: 1; color: #ffd23f;
+           -webkit-text-stroke: 12px #1b1e3a; paint-order: stroke fill; opacity: 0; }
+  .gchip { position: absolute; height: 64px; line-height: 64px; padding: 0 26px; border-radius: 32px; background: #fff; color: #1b1e3a;
+           font-family: Poppins, sans-serif; font-weight: 800; font-size: 30px; opacity: 0; box-shadow: 0 6px 16px rgba(0,0,0,.3); }
+
+  /* bird strike tape */
+  #tape { position: absolute; left: -200px; top: 900px; width: 1480px; height: 150px; line-height: 150px; text-align: center; transform: rotate(-9deg);
+          background: repeating-linear-gradient(45deg, #ffd23f 0 60px, #1b1e3a 60px 120px); opacity: 0; }
+  #tape-t { display: inline-block; padding: 0 40px; background: #ffd23f; color: #1b1e3a; font-family: Poppins, sans-serif; font-weight: 900; font-size: 96px; line-height: 130px; }
+
+  /* outro */
+  #shade { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: rgba(15,18,38,.72); opacity: 0; }
+  .sum { position: absolute; left: 0; width: 1080px; text-align: center; font-family: Poppins, sans-serif; font-weight: 900; color: #fff; opacity: 0; }
+  #sum1 { top: 640px; font-size: 104px; } #sum2 { top: 790px; font-size: 104px; } #sum3 { top: 940px; font-size: 104px; color: #ffd23f; }
+  #sum4 { top: 1140px; font-size: 44px; font-weight: 700; color: #c7cbe3; }
+
+  #progress { position: absolute; left: 60px; top: 1842px; width: 960px; height: 12px; border-radius: 6px; background: rgba(255,255,255,.3); overflow: hidden; }
+  #progress-fill { position: absolute; left: 0; top: 0; width: 960px; height: 12px; background: #ffd23f; transform-origin: 0 50%; }
+  #credit { position: absolute; left: 60px; top: 1866px; width: 960px; font-family: Inter, sans-serif; font-weight: 500; font-size: 20px;
+            color: rgba(255,255,255,.85); text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="32.5" data-width="1080" data-height="1920">
+  <video id="footage" src="assets/wing_v.mp4" data-start="0" data-duration="29.96" data-track-index="0" muted playsinline></video>
+  <audio id="sound" src="assets/wing_a.mp3" data-start="0" data-duration="32.5" data-track-index="1" data-volume="1"></audio>
+
+  <section id="overlay" class="clip" data-start="0" data-duration="32.5" data-track-index="2">
+    <img id="still" src="assets/last.jpg" alt="" />
+    <div id="shade"></div>
+    <div id="card"><div id="card-title">PRE-FLIGHT CHECKLIST</div><div id="score">0/6</div></div>
+    <div id="chips"></div>
+
+    <div class="giant" id="cd3">3</div><div class="giant" id="cd2">2</div><div class="giant" id="cd1">1</div>
+    <div class="giant" id="planb" style="font-size:210px; white-space: nowrap; left: 40px; width: 1000px">PLAN B</div>
+    <div class="label" id="lb-roof">ROOF: OPTIONAL</div>
+    <div class="label" id="lb-umb">...that's an umbrella</div>
+    <div id="flash"></div>
+
+    <div id="alt"><div id="alt-bar"><div id="alt-fill"></div></div><div id="alt-num">0 FT</div></div>
+    <div class="warn" id="wr1" style="top:1300px">⚠ MASTER CAUTION</div>
+    <div class="warn" id="wr2" style="top:1390px">⚠ HULL: MOSTLY TAPE</div>
+    <div class="warn" id="wr3" style="top:1480px">⚠ PILOT: STILL SMILING</div>
+
+    <div id="step"><div id="step-k">NEXT STEP</div><div id="step-t">DEPLOY PARACHUTE</div></div>
+
+    <div id="gad-head">EMERGENCY GADGETS</div>
+    <div id="gad-n">0</div>
+    <div id="gchips"></div>
+
+    <div id="tape"><span id="tape-t">BIRD STRIKE</span></div>
+
+    <div class="sum" id="sum1">CHECKLIST 3/6</div>
+    <div class="sum" id="sum2">GADGETS 7</div>
+    <div class="sum" id="sum3">BIRDS 1</div>
+    <div class="sum" id="sum4">nobody told them about the umbrella</div>
+
+    <div id="progress"><div id="progress-fill"></div></div>
+    <div id="credit">WING IT! (CC BY 4.0) Blender Foundation, studio.blender.org · Edit: HTML + GSAP, rendered with HyperFrames</div>
+  </section>
+</div>
+
+<script>
+  // All times are seconds into the 30 s window (film 1:22.0 to 1:52.0); events read from the frames.
+  const ITEMS = [
+    { t: 'SEATBELTS', at: 1.5, ok: false },   // cat yanked upside down
+    { t: 'IGNITION',  at: 3.5, ok: true  },   // rocket lights in the barn (cut at 85.5)
+    { t: 'LIFTOFF',   at: 5.0, ok: true  },   // through the roof
+    { t: 'ALTITUDE',  at: 10.5, ok: true },   // sky and the moon
+    { t: 'PARACHUTE', at: 22.0, ok: false },  // the umbrella turns inside out
+    { t: 'AIRSPACE',  at: 28.83, ok: false }, // rooster through the windshield
+  ];
+  const GADGETS = [['PLUNGER', 25.0], ['LIFE RING', 25.1], ['GRAPPLING HOOK', 25.5], ['BALLOON', 25.9], ['EXTINGUISHER', 26.0], ['RAFT', 26.2], ['BOXING GLOVE', 27.5]];
+  const END = 32.5, VIDEO_END = 29.96;
+
+  const chips = document.getElementById('chips');
+  ITEMS.forEach((it, i) => {
+    const c = document.createElement('div'); c.className = 'chip'; c.id = 'c' + i;
+    c.style.left = (52 + (i % 3) * 332) + 'px'; c.style.top = (112 + Math.floor(i / 3) * 92) + 'px';
+    c.innerHTML = `<div class="chip-dot" id="cd-${i}">${it.ok ? '✓' : '✗'}</div><div class="chip-t">${it.t}</div>`;
+    chips.appendChild(c);
+  });
+  const gch = document.getElementById('gchips');
+  GADGETS.forEach(([name], i) => {
+    const g = document.createElement('div'); g.className = 'gchip'; g.id = 'gc' + i; g.textContent = name;
+    g.style.left = (i % 2 ? 560 : 60) + 'px'; g.style.top = (1300 + Math.floor(i / 2) * 82) + 'px';
+    gch.appendChild(g);
+  });
+
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const shake = (t, amp = 14) => {
+    tl.to('#footage', { x: amp, y: -amp * 0.6, duration: 0.04 }, t);
+    tl.to('#footage', { x: -amp, y: amp * 0.5, duration: 0.05 }, t + 0.04);
+    tl.to('#footage', { x: amp * 0.5, y: 0, duration: 0.05 }, t + 0.09);
+    tl.to('#footage', { x: 0, y: 0, duration: 0.08 }, t + 0.14);
+  };
+  const flash = (t, a = 0.7) => { tl.to('#flash', { opacity: a, duration: 0.04 }, t); tl.to('#flash', { opacity: 0, duration: 0.25 }, t + 0.04); };
+  const pop = (sel, t, hold) => {
+    tl.fromTo(sel, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.18, ease: 'back.out(2.6)' }, t);
+    tl.to(sel, { opacity: 0, scale: 1.15, duration: 0.18, ease: 'power1.in' }, t + hold);
+  };
+
+  // checklist card + chips come in with the cat's clipboard
+  tl.fromTo('#card', { y: -340 }, { y: 0, duration: 0.45, ease: 'power3.out' }, 0.15);
+  tl.fromTo('.chip', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.25, ease: 'power2.out', stagger: 0.06 }, 0.4);
+
+  // each checklist item resolves on its event
+  let done = 0;
+  ITEMS.forEach((it, i) => {
+    const color = it.ok ? '#21b35a' : '#e5322d';
+    tl.to('#cd-' + i, { backgroundColor: color, borderColor: color, color: '#fff', duration: 0.08 }, it.at);
+    tl.fromTo('#c' + i, { scale: 1 }, { scale: 1.12, duration: 0.09, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false }, it.at);
+    if (!it.ok) tl.to('#c' + i, { backgroundColor: '#ffe3e1', duration: 0.1 }, it.at);
+    if (it.ok) { done += 1; const n = done; tl.set('#score', { textContent: n + '/6' }, it.at); }
+  });
+
+  // countdown into the ignition cut
+  [['#cd3', 2.75], ['#cd2', 3.0], ['#cd1', 3.25]].forEach(([s, t]) => {
+    tl.fromTo(s, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.1, ease: 'back.out(2)' }, t);
+    tl.to(s, { opacity: 0, scale: 1.3, duration: 0.12 }, t + 0.16);
+  });
+  flash(3.5, 0.85); shake(3.5, 18);
+  pop('#lb-roof', 5.2, 1.2); shake(5.0, 12);
+  shake(6.6, 20); shake(7.0, 12);
+
+  // altitude meter 7.6 to 12.2
+  tl.fromTo('#alt', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.3 }, 7.6);
+  const alt = { v: 0 };
+  tl.fromTo('#alt-fill', { scaleY: 0 }, { scaleY: 1, duration: 3.4, ease: 'power2.inOut' }, 7.7);
+  tl.fromTo(alt, { v: 0 }, { v: 12000, duration: 3.4, ease: 'power2.inOut',
+    onUpdate: () => { document.getElementById('alt-num').textContent = (Math.round(alt.v / 100) * 100).toLocaleString('en-US') + ' FT'; } }, 7.7);
+  tl.to('#alt', { opacity: 0, x: 60, duration: 0.3 }, 12.0);
+
+  // warnings in the red cockpit
+  [['#wr1', 12.6], ['#wr2', 14.0], ['#wr3', 15.4]].forEach(([s, t]) => {
+    tl.fromTo(s, { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.2, ease: 'back.out(2)' }, t);
+  });
+  for (let t = 12.8; t < 17.4; t += 0.5) { tl.to('.warn', { backgroundColor: '#ff6b5e', duration: 0.1 }, t); tl.to('.warn', { backgroundColor: '#e5322d', duration: 0.15 }, t + 0.12); }
+  tl.to('.warn', { opacity: 0, x: -60, duration: 0.2, stagger: 0.05 }, 17.5);
+
+  // parachute step, the umbrella, the X
+  tl.fromTo('#step', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.25, ease: 'power3.out' }, 19.0);
+  pop('#lb-umb', 20.6, 1.2);
+  tl.to('#step', { backgroundColor: '#e5322d', duration: 0.1 }, 22.0);
+  tl.set('#step-k', { textContent: 'RESULT' }, 22.0);
+  tl.set('#step-t', { textContent: 'PARACHUTE: FAILED' }, 22.0);
+  shake(22.0, 16);
+  tl.to('#step', { opacity: 0, y: 40, duration: 0.25 }, 23.4);
+  pop('#planb', 23.2, 1.1);
+
+  // gadgets: counter + chips while the hull throws everything out
+  tl.fromTo(['#gad-head', '#gad-n'], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2 }, 24.8);
+  GADGETS.forEach(([name, t], i) => {
+    tl.set('#gad-n', { textContent: String(i + 1) }, t);
+    tl.fromTo('#gad-n', { scale: 1.25 }, { scale: 1, duration: 0.15, ease: 'power2.out', immediateRender: false }, t);
+    tl.fromTo('#gc' + i, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.18, ease: 'back.out(2.4)' }, t);
+  });
+  tl.to(['#gad-head', '#gad-n', '.gchip'], { opacity: 0, duration: 0.2 }, 28.6);
+
+  // bird strike
+  flash(28.83, 0.9); shake(28.83, 22);
+  tl.fromTo('#tape', { opacity: 0, scaleX: 0.2 }, { opacity: 1, scaleX: 1, duration: 0.2, ease: 'power3.out' }, 28.85);
+  tl.to('#tape', { opacity: 0, duration: 0.2 }, VIDEO_END - 0.1);
+
+  // outro on the frozen last frame
+  tl.set('#still', { opacity: 1 }, VIDEO_END - 0.04);
+  tl.to('#shade', { opacity: 1, duration: 0.3 }, VIDEO_END);
+  [['#sum1', 0.2], ['#sum2', 0.45], ['#sum3', 0.7], ['#sum4', 1.0]].forEach(([s, d]) => {
+    tl.fromTo(s, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: 'back.out(2)' }, VIDEO_END + d);
+  });
+
+  tl.fromTo('#progress-fill', { scaleX: 0 }, { scaleX: 1, duration: END, ease: 'none' }, 0);
+  tl.to({}, { duration: END }, 0);
+  window.__timelines.main = tl;
+</script>
+</body>
+</html>
