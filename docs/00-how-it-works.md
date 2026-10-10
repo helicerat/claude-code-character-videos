@@ -18,24 +18,12 @@ Claude Code drives every step. Steps 1 to 4 plan and make the media. Steps 5 to 
 
 Footage and a song you may use replace steps 2 to 4 for free ([05-or-use-existing-footage](05-or-use-existing-footage.md)). [`prompts/00-brief.md`](../prompts/00-brief.md) fixes what appears on screen on either path. The three examples, [wing-it](../examples/wing-it/README.md), [spin-count](../examples/spin-count/README.md) and [handwash-song](../examples/handwash-song/README.md), take the free path and run steps 5 to 7 in full.
 
-```mermaid
-flowchart LR
-  IDEA["1 · Idea<br/>BRIEF.md"]
-  subgraph A["Generate (steps 2-4, paid)"]
-    CHAR["2 · Character"] --> ANIM["4 · Animation"]
-    SONG["3 · Song or voice"] --> ANIM
-  end
-  subgraph B["Existing footage (05, free)"]
-    FOUND["footage and sound<br/>you may use"]
-  end
-  IDEA --> CHAR
-  IDEA --> SONG
-  IDEA --> FOUND
-  ANIM --> TIME["5 · Timings<br/>words, beats, events"]
-  FOUND --> TIME
-  TIME --> EDIT["6 · The edit<br/>HTML + GSAP"]
-  EDIT --> RENDER["7 · Render<br/>HyperFrames"]
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="img/pipeline-dark.svg">
+    <img src="img/pipeline-light.svg" width="960" alt="The pipeline: 1 Idea, then 2 Character, 3 Song or voice and 4 Animate with paid models, then 5 Timings, 6 Edit in HTML + GSAP and 7 Render with HyperFrames, locally and free. A dashed path goes from Idea straight to Timings: use existing footage and skip steps 2 to 4.">
+  </picture>
+</p>
 
 ## Why the edit is code
 

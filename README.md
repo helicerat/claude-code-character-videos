@@ -6,15 +6,12 @@ A pipeline for making a short vertical video with an AI character: Claude Code d
 
 ## How it works
 
-```mermaid
-flowchart LR
-  subgraph gen["Generate (paid)"]
-    char["2 · Character"] --> voice["3 · Song or voice"] --> anim["4 · Animate"]
-  end
-  idea["1 · Idea"] --> char
-  idea -.-> foot["Existing footage<br/>(free)"] -.-> timing
-  anim --> timing["5 · Timings"] --> edit["6 · Edit<br/>HTML + GSAP"] --> render["7 · Render<br/>HyperFrames"]
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/img/pipeline-dark.svg">
+    <img src="docs/img/pipeline-light.svg" width="960" alt="The pipeline: 1 Idea, then 2 Character, 3 Song or voice and 4 Animate with paid models, then 5 Timings, 6 Edit in HTML + GSAP and 7 Render with HyperFrames, locally and free. A dashed path goes from Idea straight to Timings: use existing footage and skip steps 2 to 4.">
+  </picture>
+</p>
 
 Steps 2 to 4 call paid generation models. The rest is free, apart from your Claude plan and an optional Groq transcription at a fraction of a cent.
 

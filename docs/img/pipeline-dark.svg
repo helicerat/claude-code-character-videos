@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="252" viewBox="0 0 960 252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title>Pipeline: idea, character, song or voice, animate, timings, edit, render</title>
+<rect x="147" y="24" width="398" height="156" rx="18" fill="#e0896a" fill-opacity="0.12" stroke="#e0896a" stroke-opacity="0.5" stroke-width="1.2"/>
+<text x="346.0" y="50" text-anchor="middle" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#e0896a">GENERATE · PAID MODELS</text>
+<rect x="549" y="24" width="398" height="156" rx="18" fill="#9198a1" fill-opacity="0.08" stroke="#9198a1" stroke-opacity="0.35" stroke-width="1.2"/>
+<text x="748.0" y="50" text-anchor="middle" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#9198a1">EDIT AS CODE · LOCAL, FREE</text>
+<text x="78.0" y="50" text-anchor="middle" font-size="11.5" font-weight="700" letter-spacing="1.4" fill="#9198a1">START</text>
+<path d="M140 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M274 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M408 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M542 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M676 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M810 118.0 h10 m-5 -5 l5 5 l-5 5" fill="none" stroke="#6e7681" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="20" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="78.0" cy="94" r="12" fill="#e0896a"/>
+<text x="78.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">1</text>
+<text x="78.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Idea</text>
+<text x="78.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">BRIEF.md</text>
+<rect x="154" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="212.0" cy="94" r="12" fill="#e0896a"/>
+<text x="212.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">2</text>
+<text x="212.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Character</text>
+<text x="212.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">sheet + keyframes</text>
+<rect x="288" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="346.0" cy="94" r="12" fill="#e0896a"/>
+<text x="346.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">3</text>
+<text x="346.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Song or voice</text>
+<text x="346.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">take checked by word</text>
+<rect x="422" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="480.0" cy="94" r="12" fill="#e0896a"/>
+<text x="480.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">4</text>
+<text x="480.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Animate</text>
+<text x="480.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">one clip per scene</text>
+<rect x="556" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="614.0" cy="94" r="12" fill="#e0896a"/>
+<text x="614.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">5</text>
+<text x="614.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Timings</text>
+<text x="614.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">words, beats, events</text>
+<rect x="690" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="748.0" cy="94" r="12" fill="#e0896a"/>
+<text x="748.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">6</text>
+<text x="748.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Edit</text>
+<text x="748.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">HTML + GSAP</text>
+<rect x="824" y="70" width="116" height="96" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1.2"/>
+<circle cx="882.0" cy="94" r="12" fill="#e0896a"/>
+<text x="882.0" y="98.5" text-anchor="middle" font-size="13" font-weight="800" fill="#0d1117">7</text>
+<text x="882.0" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#f0f6fc">Render</text>
+<text x="882.0" y="150" text-anchor="middle" font-size="11" fill="#9198a1">HyperFrames to MP4</text>
+<path d="M78.0 166 V210 Q78.0 222 90.0 222 H602.0 Q614.0 222 614.0 210 V186" fill="none" stroke="#6e7681" stroke-width="1.6" stroke-dasharray="5 5"/>
+<path d="M609.0 192 l5 -6 l5 6" fill="none" stroke="#6e7681" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="196.0" y="209" width="300" height="26" rx="13" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="346.0" y="226.5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#f0f6fc">or use existing footage, skip 2 to 4 (free)</text>
+</svg>
