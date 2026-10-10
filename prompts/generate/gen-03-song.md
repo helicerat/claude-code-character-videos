@@ -1,22 +1,22 @@
 # gen-03: the song and the lyrics check
 
-What it does: writes lyrics where every line is one scene, generates a 25-35 s song on those exact words, and proves the model sang every word before anything is animated.
-What you should see: `lyrics.txt` with a timing table, 2-3 takes in `assets/song/`, and a diff that says "0 missing" for the take you keep.
+**What it does:** writes lyrics where every line is one scene, generates a 25-35 s song on those exact words, and proves the model sang every word before anything is animated.
 
-Status: written from docs, not run for this repo. Built from the method in [`docs/03-song-or-voice.md`](../../docs/03-song-or-voice.md); expect to tune it.
+**What you should see:** `lyrics.txt` with a timing table, 2 or 3 takes in `assets/song/`, and a diff that says "0 missing" for the take you keep.
 
-Pipeline step 3. Paid: $0.04 to $0.08 per take, 2 to 6 takes. Step 1 below (the lyrics) runs before [`gen-02-keyframes.md`](gen-02-keyframes.md). Next: [`gen-04-cut-song.md`](gen-04-cut-song.md).
+Step 3. Paid: `lyria-3-clip-preview` $0.04 per clip, `lyria-3.5` $0.08 per song ([Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing), 2026-10-09), 2 to 6 takes. Step 1 of the prompt (the lyrics) runs before [`gen-02-keyframes.md`](gen-02-keyframes.md). Method: [docs/03-song-or-voice.md](../../docs/03-song-or-voice.md). Next: [`gen-04-cut-song.md`](gen-04-cut-song.md).
 
-## Prompt for Claude Code
+## Prompt
 
-```
+```text
 The project folder is examples/my-video. BRIEF.md, lyrics.txt, script.txt, STORYBOARD.md,
 PROMPTS.md, costs.csv and every assets/ path below are inside it; docs/ and scripts/ are at the
 repo root. Run commands from the repo root.
-Read BRIEF.md and docs/03-song-or-voice.md.
+Read BRIEF.md and docs/03-song-or-voice.md. The model prompts this prompt refers to are in
+prompts/generate/gen-03-song.md.
 Before every paid call, state the model, the provider, the number of calls or seconds and the
 list price, and wait for my OK. Log every paid call in costs.csv (date, step, model, provider,
-units, list price in USD, kept or rejected), rejected takes included.
+units, unit_price_usd, total_usd, kept, note), rejected takes included.
 
 1. Write lyrics.txt for a <25-35> s song about <TOPIC>, one line per scene.
    - The first sung line is the hook and starts at 0:00. No instrumental intro.
@@ -31,7 +31,7 @@ units, list price in USD, kept or rejected), rejected takes included.
    line | scene id | target start and end in seconds at <BPM> BPM, 2 bars per line.
    Wait for my approval.
 
-2. Generate 2 takes with <MODEL> through <CLI or MCP>, using the model prompt below.
+2. Generate 2 takes with <MODEL> through <CLI or MCP>, using the model prompt.
    Default: lyria-3-clip-preview for a 30 s song (it always returns 30 s), lyria-3.5 if the song
    must be shorter or longer. Show the price first. Save as assets/song/take1.mp3, take2.mp3.
 
@@ -56,11 +56,11 @@ units, list price in USD, kept or rejected), rejected takes included.
 Do not cut or animate anything yet.
 ```
 
-## Model prompt
+## Model prompts
 
 **Lyria** (`lyria-3-clip-preview` or `lyria-3.5`). Musical direction first, then the lyrics under a `Lyrics:` header:
 
-```
+```text
 A cheerful sing-along song for young children, <LENGTH> seconds, <BPM> BPM in <KEY>.
 <2-3 INSTRUMENTS, e.g. ukulele, hand claps, light glockenspiel>.
 One warm, clear <female | male> lead vocal, every word easy to understand, slow enough to sing along.
@@ -78,7 +78,7 @@ Lyrics:
 <COUNT-BACK LINE>
 ```
 
-**ElevenLabs Music** (`music_v2_5`, composition plan), when every scene must have an exact length. One chunk per scene, `duration_ms` = the scene window (3,000 ms minimum). Styles must be in English:
+**ElevenLabs Music** (`music_v2_5`, composition plan), when every scene must have an exact length. One chunk per scene, `duration_ms` equal to the scene window (3,000 ms minimum). Styles must be in English:
 
 ```json
 {"chunks": [
@@ -92,11 +92,11 @@ Lyrics:
 ]}
 ```
 
-**Suno** (UI only; turn off "Variety" and "Personalize"). Style box: `cheerful children's sing-along, <BPM> BPM, <INSTRUMENTS>, one clear warm <female> lead vocal, simple melody, vocals start immediately at 0:00, no instrumental intro`. Exclude: `choir, crowd vocals, long intro`.
+**Suno** (UI only; turn off "Variety" and "Personalize" so Suno does not rewrite your prompt). Style box: `cheerful children's sing-along, <BPM> BPM, <INSTRUMENTS>, one clear warm <female> lead vocal, simple melody, vocals start immediately at 0:00, no instrumental intro`. Exclude: `choir, crowd vocals, long intro`.
 
-**Worked example** (our draft for the handwashing video, not generated yet). At 110 BPM and 2 bars per line, 7 lines run about 30.5 s:
+**Example lyrics**, a handwashing song at 110 BPM, 2 bars per line:
 
-```
+```text
 [Hook]
 Wash, wash, wash your hands (wash your hands)
 [Verse]
@@ -110,20 +110,11 @@ One, two, three, four, five
 Clean hands, high five
 ```
 
-## Why each piece is there
+## Notes
 
-- **The check before anything else.** A generated counting song can skip a word, a lone shouted number most easily, and only a transcription shows it. Finding the skip after the lip-sync step means paying for the most expensive step twice.
-- **Vocal at 0:00.** An instrumental intro spends the first seconds on nothing. TikTok: "Introduce your content proposition in the first 3 seconds" ([TikTok](https://ads.tiktok.com/help/article/creative-best-practices)).
-- **`Lyrics:` header, parentheses for echoes, direction separate from lyrics.** Google: "Include your lyrics directly in the prompt beneath a `Lyrics:` header", "Use parentheses for backing vocals, echoes, or ad-libs", and "Separate lyrics from instructions" ([Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide), [music docs](https://ai.google.dev/gemini-api/docs/music-generation), CC BY 4.0).
-- **Clip model for a 30 s short.** "The Lyria 3 Clip model always generates a **30-second** clip", and Google's best practice is "Iterate with Clip first" (music docs).
-- **Composition plan for exact scene lengths.** "for `music_v2` and `music_v2_5` section durations are always enforced" ([ElevenLabs API](https://elevenlabs.io/docs/api-reference/music/compose-detailed.md)). "The first chunk is the most important", "Aim for at least 6-7 styles in early chunks", "Use negative styles liberally" ([composition plans](https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans)). Whether 4.4 s chunks join without audible seams is unverified; test one song first.
-- **Numbers spelled as sung, the same everywhere.** The aligner compares letters and digits, so "3" in the lyrics and "three" in the transcript do not match, and the video prompts quote the same words.
-- **Measure tempo and length.** A prompted tempo or length is a request; the take decides.
-- **Blind transcription.** A lyrics prompt pulls the transcriber toward the expected words and can hide a skip (our reasoning). The 20% rule and `medium.en` for music are from HyperFrames' mandatory transcript check ([transcript-handling.md](https://github.com/heygen-com/hyperframes/blob/main/skills/media-use/audio/references/captions/transcript-handling.md)).
-- **Retries from zero, two at a time.** Stacking "less this, no that" onto the last prompt makes it vaguer; write the next prompt fresh, fire a small batch and listen before firing more. Expect misses: plan for 2 to 3 takes per usable song.
-- **Suno toggles.** Turn "Variety" and "Personalize" off so Suno does not rewrite your prompt.
-- **No artist names or existing lyrics.** Lyria blocks "prompts that request specific artist voices or the generation of copyrighted lyrics" (music docs).
-
-Price guide (Oct 2026): `lyria-3-clip-preview` $0.04 per clip, `lyria-3.5` $0.08 per song ([Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing)). Every Lyria file carries a SynthID watermark. The default prompt above is for a children's song: for a kids video made through the Gemini API, check the under-18 clause in the API terms first (section 7 of [`docs/03-song-or-voice.md`](../../docs/03-song-or-voice.md#7-rights-and-labels)). A song with AI music as the main focus needs YouTube's AI disclosure even in a fully animated video ([YouTube](https://support.google.com/youtube/answer/14328491)).
-
-Sources: https://ai.google.dev/gemini-api/docs/lyria-prompt-guide , https://ai.google.dev/gemini-api/docs/music-generation , https://ai.google.dev/gemini-api/docs/pricing , https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans , https://elevenlabs.io/docs/api-reference/music/compose-detailed.md , https://github.com/heygen-com/hyperframes/blob/main/skills/media-use/audio/references/captions/transcript-handling.md , https://ads.tiktok.com/help/article/creative-best-practices
+- Check before anything else. A generated counting song can skip a word, a lone shouted number most easily. Finding the skip after the lip-sync step means paying for the most expensive step twice.
+- Vocal at 0:00. TikTok: "Introduce your content proposition in the first 3 seconds" ([TikTok](https://ads.tiktok.com/help/article/creative-best-practices)).
+- Lyria. Google: "Include your lyrics directly in the prompt beneath a `Lyrics:` header" and "Use parentheses for backing vocals, echoes, or ad-libs" ([Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide), CC BY 4.0). "The Lyria 3 Clip model always generates a **30-second** clip", and Lyria blocks "prompts that request specific artist voices or the generation of copyrighted lyrics" ([music docs](https://ai.google.dev/gemini-api/docs/music-generation)).
+- ElevenLabs. "for `music_v2` and `music_v2_5` section durations are always enforced" ([API](https://elevenlabs.io/docs/api-reference/music/compose-detailed.md)); "The first chunk is the most important" ([composition plans](https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans)). Test one song before you rely on 4.4 s chunks joining without audible seams.
+- Blind transcription: a lyrics prompt pulls the transcriber toward the expected words and can hide a skip. The 20% rule and `medium.en` for music come from HyperFrames' transcript check ([transcript-handling.md](https://github.com/heygen-com/hyperframes/blob/main/skills/media-use/audio/references/captions/transcript-handling.md)). Numbers spelled as sung keep the aligner's diff clean: "3" and "three" do not match.
+- Rights. Every Lyria file carries a SynthID watermark. For a kids video made through the Gemini API, check the under-18 clause in the API terms first ([docs/03-song-or-voice.md, section 7](../../docs/03-song-or-voice.md#7-rights-and-labels)). A song with AI music as the main focus needs YouTube's AI disclosure even in a fully animated video ([YouTube](https://support.google.com/youtube/answer/14328491)).

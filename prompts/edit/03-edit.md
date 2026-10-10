@@ -1,14 +1,14 @@
 # 03 Edit
 
-**What it does:** writes the HyperFrames composition for your video by adapting the example's template, wires every animation to `transcript.json`, builds `index.html`, lints it, and takes snapshots. It does not render.
+**What it does:** writes the HyperFrames composition by adapting the example's template, keys every animation to `transcript.json`, builds `index.html`, lints it and takes snapshots. It does not render.
 
-**What you should see:** `examples/my-video/build/index.template.htm`, a generated `examples/my-video/index.html`, the printed `LINES` and `SLOTS` tables, a list of catalog searches and what came of them, lint output with 0 errors, and `examples/my-video/snapshots/contact-sheet.jpg` with one frame per lyric line. For reference, lint on the example gives 0 errors and 2 `nested_structure_needs_subcomposition` warnings.
+**What you should see:** `build/index.template.htm`, a generated `index.html`, the printed `LINES` and `SLOTS` tables, the catalog searches and what came of them, lint with 0 errors, and `snapshots/contact-sheet.jpg` with one frame per lyric line.
 
-## Before you paste
+**Before you paste:**
 
 - [`00-brief.md`](../00-brief.md), [`01-assets.md`](01-assets.md) and [`02-word-timing.md`](02-word-timing.md) are done: `BRIEF.md`, `lyrics.txt`, `assets/footage.mp4`, `assets/song.mp3`, `assets/gsap.min.js` and an aligned `transcript.json` exist.
-- Run `npx hyperframes@0.8.143 browser ensure` once on this machine.
-- Optional: the HyperFrames plugin for Claude Code (`claude plugin marketplace add heygen-com/hyperframes`, then `claude plugin install hyperframes@hyperframes`). The prompt works without it. On Windows the marketplace add once failed with `EBUSY` on a half-cloned folder; restarting Claude Code and retrying fixed it.
+- `npx hyperframes@0.8.143 browser ensure` has run once.
+- Optional: the HyperFrames plugin for Claude Code (`claude plugin marketplace add heygen-com/hyperframes`, then `claude plugin install hyperframes@hyperframes`). The prompt works without it. On Windows, if `marketplace add` fails with `EBUSY` on a half-cloned folder, restart Claude Code and retry.
 
 ## Prompt
 
@@ -39,7 +39,7 @@ Determinism and HyperFrames rules:
 - No Math.random, Date.now, performance.now, requestAnimationFrame, setTimeout, setInterval or fetch. Never play, pause or seek media from script.
 - Do not center anything GSAP moves with translate(-50%,-50%); use flex, left/top, or xPercent/yPercent. Do not tween visibility, display or autoAlpha on .clip elements.
 - Lay out with fixed sizes; do not measure the DOM inside tweens.
-- No timeline callback (onUpdate, onComplete) writes to the page. A number on screen is the element's textContent, tweened with snap: { textContent: 1 }, as the example's timer counter does. A DOM write from onUpdate made HyperFrames' draw-element self-check fail on the example and doubled its render time.
+- No timeline callback (onUpdate, onComplete) writes to the page. A number on screen is the element's textContent, tweened with snap: { textContent: 1 }, as the example's timer counter does. A DOM write from a timeline callback can fail HyperFrames' draw-element self-check, and then the whole video is captured again with screenshots at about twice the time.
 - GSAP loads from assets/gsap.min.js. Fonts: Poppins and Inter only, unless you add an @font-face pointing to a local file. Name every font with the font-family property (plus font-weight and font-size), never only inside the font: shorthand: HyperFrames 0.8.143 neither fetches nor lints a family named that way, and the text silently falls back to the system font. In the snapshot output (step 3 below), check that the compiler line says "Injected deterministic @font-face rules for N requested font families" with N equal to the number of families you use.
 
 Catalog first: before hand-animating an effect, search the HyperFrames catalog with npx hyperframes@0.8.143 catalog <words>, for example "karaoke", "progress ring", "number pop", "counter", "board". For each search tell me the top items and whether you used one. Most catalog items are 1920x1080, and caption components ship as demos with a fixed word list and timeline, so anything you take must be resized for 1080x1920 and rewired to TRANSCRIPT. Install an item with npx hyperframes@0.8.143 add <name> only after telling me which one.
@@ -55,7 +55,8 @@ Stop there. Do not render, and do not edit index.html by hand.
 
 ## Notes
 
-- Why `--describe false`: when `GEMINI_API_KEY` is set, `snapshot` sends frames to Gemini for a description by default. Leave it off unless you want that.
-- What the catalog had for "karaoke" at 0.8.143: `caption-pill-karaoke` (pill with per-word color highlight) and `mk-callout-highlight`. The example's karaoke is hand-written: it scales each word and pops a bubble above it, which the pill component does not do. The research for this repo found no close catalog match for the slot board; the nearest is the `split-flap-board` block.
-- The rules above come from the HyperFrames docs: [HTML schema](https://hyperframes.heygen.com/reference/html-schema), [determinism](https://hyperframes.heygen.com/concepts/determinism), [rules and anti-patterns](https://hyperframes.heygen.com/prompting/rules-and-anti-patterns). Layer-by-layer walkthrough of the example: [`docs/07-the-edit.md`](../../docs/07-the-edit.md).
+- `--describe false` matters: when `GEMINI_API_KEY` is set, `snapshot` sends frames to Gemini for a description by default.
+- Lint on handwash-song gives 0 errors and 2 `nested_structure_needs_subcomposition` warnings, harmless for a single-file composition.
+- At 0.8.143 the catalog search "karaoke" returns `caption-pill-karaoke` (a pill with per-word color) and `mk-callout-highlight`. The example's karaoke is hand-written because it scales each word and pops a bubble above it. Nothing in the catalog matches the slot board; the nearest is the `split-flap-board` block.
+- The rules come from the HyperFrames docs: [HTML schema](https://hyperframes.heygen.com/reference/html-schema), [determinism](https://hyperframes.heygen.com/concepts/determinism), [rules and anti-patterns](https://hyperframes.heygen.com/prompting/rules-and-anti-patterns). The example layer by layer: [docs/07-the-edit.md](../../docs/07-the-edit.md).
 - Next: [`04-review.md`](04-review.md).

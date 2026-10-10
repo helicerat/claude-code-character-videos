@@ -226,7 +226,7 @@ export function proxyHint() {
       '  PowerShell:  $env:NODE_USE_ENV_PROXY=1; npm run fetch',
     ].join('\n');
   }
-  if (!proxySet) return 'If this machine needs a proxy, set HTTPS_PROXY and NODE_USE_ENV_PROXY=1, then run again.';
+  if (!proxySet) return 'If you are behind a proxy, set HTTPS_PROXY and NODE_USE_ENV_PROXY=1, then run again.';
   return 'NODE_USE_ENV_PROXY=1 is set, so fetch goes through HTTPS_PROXY. Check that the proxy is running and reachable.';
 }
 

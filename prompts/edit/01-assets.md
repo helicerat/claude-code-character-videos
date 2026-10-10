@@ -1,15 +1,15 @@
 # 01 Assets
 
-**What it does:** downloads your sources, inspects them, proposes a crop and trim, then makes a clean silent footage file and a separate audio file, and probes everything.
+**What it does:** downloads your sources, inspects them, proposes a crop and trim, then makes a silent footage file and a separate audio file and probes everything.
 
-**What you should see:** a probe table for every source, a short description of six frames (captions, logos, black bars, cuts), a crop proposal, and after your OK two files: `examples/my-video/assets/footage.mp4` and `examples/my-video/assets/song.mp3`, with durations within 0.1 s of the source. For the example the table read: source 522x360 VP8 30 fps, Vorbis 44.1 kHz mono, 30.885 s; footage 1088x672 H.264 30 fps, 30.83 s; song MP3 44.1 kHz stereo, 30.89 s.
+**What you should see:** a probe table for every source, notes on six frames (captions, logos, black bars, cuts), a crop proposal, and after your OK `assets/footage.mp4` and `assets/song.mp3`, each within 0.1 s of the source length.
 
-## Before you paste
+**Before you paste:**
 
 - [`00-brief.md`](../00-brief.md) is done and you approved `BRIEF.md`.
-- **Generated character:** your clips are in `assets/scenes/` and the accepted take in `assets/song/song.mp3` ([`gen-05-animate.md`](../generate/gen-05-animate.md)). Skip steps 1 to 4 below. In step 5, make `assets/footage.mp4` (1088 wide for a full 9:16 frame) by trimming each scene clip to its scene length and joining them in scene order (or keep one muted `<video>` per scene, see [docs/04-animate.md](../../docs/04-animate.md#6-put-the-clips-into-the-edit)), and copy the accepted take to `assets/song.mp3`. The rest applies as written.
 - ffmpeg and ffprobe are on your PATH (`ffmpeg -version`).
-- Behind a proxy, Node's built-in `fetch` ignores `HTTPS_PROXY` unless `NODE_USE_ENV_PROXY=1` is set (tested on Node 24.18.0).
+- Behind a proxy, set `NODE_USE_ENV_PROXY=1`. Node's built-in `fetch` ignores `HTTPS_PROXY` without it.
+- **Generated character:** your clips are in `assets/scenes/` and the accepted take is `assets/song/song.mp3` ([`gen-05-animate.md`](../generate/gen-05-animate.md)). Skip steps 1 to 4 of the prompt. In step 5, trim each scene clip to its scene length and join them in scene order into `assets/footage.mp4` (1088 wide for a full 9:16 frame), or keep one muted `<video>` per scene ([docs/04-animate.md](../../docs/04-animate.md#6-put-the-clips-into-the-edit)). Copy the accepted take to `assets/song.mp3`.
 
 ## Prompt
 
@@ -38,8 +38,8 @@ Prepare the media for examples/my-video. Sources and licenses are in examples/my
 
 ## Notes
 
+- Picture and sound stay apart on purpose. HyperFrames needs every `<video>` to be `muted` or flagged with `data-has-audio`, and it mixes `<audio>` elements itself. One `<audio id="song">` is the simplest setup to keep in sync.
+- Without a keyframe every second, the HyperFrames compiler warns that sparse keyframes can cause seek failures and frozen frames.
+- The width must be a multiple of 16. HyperFrames 0.8.143 extracts video frames through a yuv420p to gbrp conversion, and ffmpeg 8.1.2 (gyan.dev build) blacks out every column after the last multiple of 16. A 1080-wide card gets a dark band at its right edge ([docs/08-render-and-qa.md](../../docs/08-render-and-qa.md#5-fix-the-right-edge)).
+- The final MP4 carries 48 kHz AAC audio. That is expected; look for a mismatch you did not cause.
 - Next: [`02-word-timing.md`](02-word-timing.md).
-- Sound and picture are kept apart on purpose. HyperFrames needs every `<video>` to be `muted` or flagged with `data-has-audio`, and it mixes `<audio>` elements itself. One `<audio id="song">` is the simplest setup to keep in sync.
-- The keyframe flags matter. The example's `cat.mp4` was encoded without them, and the HyperFrames compiler warned: sparse keyframes (max interval 8.33 s) can cause seek failures and frozen frames. In that render, ffmpeg `freezedetect` on the footage region found the same still stretches as in `cat.mp4` itself, so nothing froze. There is still no reason to risk it.
-- The width must be a multiple of 16. HyperFrames 0.8.143 extracts video frames through a yuv420p to gbrp conversion, and ffmpeg 8.1.2 (gyan.dev build) leaves every column after the last multiple of 16 black in it: a 1080-wide clip gave the example a dark band at the right edge of the footage card ([docs/08-render-and-qa.md](../../docs/08-render-and-qa.md#5-fix-the-right-edge)).
-- HyperFrames will resample the audio to 48 kHz AAC in the final MP4. That is expected. A mismatch you did not cause is what to look for.

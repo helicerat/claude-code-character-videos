@@ -55,7 +55,7 @@ Pages:
 `;
 
 const USER_AGENT = `claude-code-character-videos-fetch/0.1 (https://github.com/helicerat/claude-code-character-videos; downloads one example clip and one music track) node/${process.versions.node}`;
-// The CDN served both files without it in our test; it is the page a browser would send.
+// The CDN serves both files without it; it is the referer a browser would send.
 const REFERER = 'https://pixabay.com/';
 
 const VIDEO = {

@@ -40,8 +40,12 @@ function markdownFiles(dir) {
   return out;
 }
 
-/** The text with fenced code blocks and inline code blanked out, line breaks kept. */
-function stripCode(text) {
+/**
+ * The text with fenced code blocks blanked out, line breaks kept. Inline code
+ * is blanked too, unless keepInline is set: GitHub keeps inline code text when
+ * it builds a heading's anchor.
+ */
+function stripCode(text, keepInline = false) {
   const lines = text.split(/\r?\n/);
   let fence = null;
   return lines.map((line) => {
@@ -51,7 +55,7 @@ function stripCode(text) {
       return '';
     }
     if (m) { fence = m[1]; return ''; }
-    return line.replace(/(`+)[^`]*?\1/g, '');
+    return keepInline ? line : line.replace(/(`+)[^`]*?\1/g, '');
   }).join('\n');
 }
 
@@ -61,14 +65,15 @@ function slugs(file) {
   if (slugCache.has(file)) return slugCache.get(file);
   const seen = new Map();
   const out = new Set();
-  const text = stripCode(readFileSync(file, 'utf8'));
+  const text = stripCode(readFileSync(file, 'utf8'), true);
   for (const line of text.split('\n')) {
     const m = /^#{1,6}\s+(.*?)\s*#*\s*$/.exec(line);
     if (!m) continue;
     const plain = m[1]
       .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
       .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/<[^>]+>/g, '');
+      .replace(/<[^>]+>/g, '')
+      .replace(/`/g, '');
     const base = plain.toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
     const n = seen.get(base) ?? 0;
     seen.set(base, n + 1);

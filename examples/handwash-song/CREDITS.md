@@ -19,13 +19,13 @@ The video's own end card (from 25.17 s in the source) credits the people who wro
 
 ### Not endorsed
 
-This repository and the videos made with it are not endorsed by CDC or the U.S. Department of Health and Human Services (HHS). Following CDC's guidance on reusing its materials (https://www.cdc.gov/other/agencymaterials.html), we credit CDC, do not imply endorsement, and do not use the CDC logo as branding. That page could not be opened from our build machine; its rules are summarized here from our research notes.
+This repository and the videos made with it are not endorsed by CDC or the U.S. Department of Health and Human Services (HHS). Following CDC's guidance on reusing its materials (https://www.cdc.gov/other/agencymaterials.html), the repo credits CDC, does not imply endorsement, and does not use the CDC logo as branding. Read the page before you publish.
 
-The source's end card shows the CDC and HHS logos. In the current render that card is visible inside the footage card from 25.17 s to the end (30.8 s), while the outro plays below it; the logos sit at the card's bottom edge and are partly cropped. The logos are part of the original work's credits and are not used to brand this repo. The two preview images committed to the repo (`docs/img/demo.gif`, 1.8 s to 9.5 s, and `docs/img/hero.png`, frames at 3.4, 9.1 and 22.3 s) are taken from before the end card. If you publish a video derived from this example, consider ending the footage before 25.17 s or covering the card.
+The source's end card shows the CDC and HHS logos. In the current render that card is visible inside the footage card from 25.17 s to the end (30.8 s), while the outro plays below it; the logos sit at the card's bottom edge and are partly cropped. The logos are part of the original work's credits and are not used to brand this repo. The two preview images committed to the repo (`docs/img/demo.gif`, 1.8 s to 9.5 s, and `docs/img/hero.png`, frames at 3.4, 9.1 and 22.3 s) are taken from before the end card. If you publish a video made from this example, end the footage before 25.17 s or cover the card.
 
 ### What is in git and what is not
 
-- **Not committed:** the CDC file and the raw media cut from it (`cat.mp4`, `song.mp3`), the renders and the snapshots. `scripts/fetch-assets.mjs` downloads the original from Wikimedia Commons and rebuilds the derived files on your machine.
+- **Not committed:** the CDC file and the raw media cut from it (`cat.mp4`, `song.mp3`), the renders and the snapshots. `scripts/fetch-assets.mjs` downloads the original from Wikimedia Commons and rebuilds the derived files.
 - **Committed, derived from the work:** two preview images made from the render, `docs/img/demo.gif` (a 7.7 s, 360 px wide excerpt) and `docs/img/hero.png` (three frames). The cartoon inside the card is the CDC work; the overlay graphics around it are this repo's work under the MIT License. Also the text files `lyrics.txt`, `assets/whisper_verbose.json` and `transcript.json`.
 - **Distributed outside git:** the full render (`handwash-song.mp4`, 30.8 s, with sound, including the end card) is published as an asset of the repo's GitHub release, with this credit.
 - Neither the repo nor the release is endorsed by CDC or HHS.

@@ -1,16 +1,16 @@
 # 02 Word timing
 
-**What it does:** gets a start and end time for every sung word, then aligns those times to the words in your `lyrics.txt`. The words on screen come from your lyrics; the transcription only supplies the clock.
+**What it does:** gets a start and end time for every sung word and aligns those times to your `lyrics.txt`. The words on screen come from your lyrics; the transcription only supplies the clock.
 
-**What you should see:** `examples/my-video/transcript.json` with exactly as many entries as there are words in `lyrics.txt`, and a report listing every word the model heard differently, every lyric word it missed, and every extra word it invented. Then Claude stops.
+**What you should see:** `examples/my-video/transcript.json` with exactly one entry per word in `lyrics.txt`, and a report of every word the model misheard, missed or invented. Then Claude stops.
 
-## Before you paste
+**Before you paste:** [`01-assets.md`](01-assets.md) is done and `assets/song.mp3` is probed. Pick an engine:
 
-- [`01-assets.md`](01-assets.md) is done: `assets/song.mp3` exists and has been probed. For a generated song, the take check in [`gen-03-song.md`](../generate/gen-03-song.md) already ran the same aligner on the accepted take; this step produces the final `transcript.json` for the edit.
-- Pick an engine:
-  - **Groq `whisper-large-v3`** (what the example used). Needs `GROQ_API_KEY` in your environment and uploads the audio to Groq. Groq lists it at $0.111 per audio hour with a 10 s minimum ([Groq speech-to-text docs](https://console.groq.com/docs/speech-to-text)).
-  - **Local, through HyperFrames.** `npx hyperframes@0.8.143 transcribe --engine parakeet` after a one-time `npx hyperframes@0.8.143 models install parakeet` (about 640 MB per the [CLI reference](https://hyperframes.heygen.com/packages/cli)). The other local engine, whisper.cpp, was not installed on our Windows machine, and on Windows HyperFrames builds it from source, which needs cmake and a C compiler ([manager.ts](https://github.com/heygen-com/hyperframes/blob/main/packages/cli/src/whisper/manager.ts)). For sung vocals the HyperFrames docs suggest `--model medium.en` with that engine.
-- Expect mistakes. Sung words are hard for speech models. In the example, Whisper heard "Wash and sell each day" for "Wash hands well each day" on both passes, and added a "you" at 30.16 s, after the music had stopped.
+| Engine | Setup | Notes |
+|---|---|---|
+| Groq `whisper-large-v3` (used by handwash-song) | `GROQ_API_KEY` in your environment | uploads the audio; $0.111 per audio hour, 10 s minimum ([Groq docs](https://console.groq.com/docs/speech-to-text)) |
+| Parakeet, local through HyperFrames | `npx hyperframes@0.8.143 models install parakeet` once, about 640 MB ([CLI reference](https://hyperframes.heygen.com/packages/cli)) | free, offline |
+| whisper.cpp, local through HyperFrames | on Windows HyperFrames builds it from source, which needs cmake and a C compiler ([manager.ts](https://github.com/heygen-com/hyperframes/blob/main/packages/cli/src/whisper/manager.ts)) | for sung vocals the HyperFrames docs suggest `--model medium.en` |
 
 ## Prompt
 
@@ -45,7 +45,7 @@ Get word timings for examples/my-video/assets/song.mp3 and align them to example
 
 ## Notes
 
-- Why align instead of trusting the transcript: the model's text is wrong in places while its word boundaries are often still usable. In the example the alignment kept Whisper's times for the two misheard words (`hands` 3.14 to 3.84 s, `well` 3.84 to 4.30 s) and replaced only the text. The result, 38 words from 2.98 s to 24.48 s, is `examples/handwash-song/transcript.json`. Still listen to them in preview during the review step.
-- A generated song has the opposite problem: a take can skip a word, for example a lone shouted "Three!" in a counting song. Diffing every take against your lyrics is cheap and catches this before you build anything on top of it.
-- More detail on formats and the alignment algorithm: [`docs/06-word-timing.md`](../../docs/06-word-timing.md).
+- Why align: a speech model gets sung words wrong but often keeps usable word boundaries. In handwash-song, Whisper heard "Wash and sell each day" for "Wash hands well each day" on both passes and added a "you" after the music stopped. The aligner kept its times for `hands` and `well` and took the text from `lyrics.txt`. Still listen to the result in preview during the review step.
+- A generated song has the opposite problem: a take can skip a word, most often a lone shouted number. The take check in [`gen-03-song.md`](../generate/gen-03-song.md) already ran this aligner; this step makes the final `transcript.json` for the edit.
+- Formats and the alignment algorithm: [docs/06-word-timing.md](../../docs/06-word-timing.md). For a video without words, use its sections on [beats and marks](../../docs/06-word-timing.md#timings-without-words-beats-and-visual-marks) or [story events](../../docs/06-word-timing.md#story-events-stepping-through-frames) in place of this prompt.
 - Next: [`03-edit.md`](03-edit.md).

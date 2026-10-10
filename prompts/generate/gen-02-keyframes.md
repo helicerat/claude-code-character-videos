@@ -1,22 +1,22 @@
 # gen-02: one keyframe per line
 
-What it does: draws the character into one still for every line of the song or script, all in 9:16, all in one world. These stills are what the video model animates in step 5.
-What you should see: `STORYBOARD.md` with one row per line, then one image per row. Same face, same outfit, a clear action that matches the line, and a calm area where captions will go.
+**What it does:** draws the character into one 9:16 still for every line of the song or script, all in one world. The video model animates these stills in step 4.
 
-Status: written from docs, not run for this repo. Built from the method in [`docs/02-character.md`](../../docs/02-character.md); expect to tune it.
+**What you should see:** `STORYBOARD.md` with one row per line, then one image per row: the same face and outfit, a clear action that matches the line, and a calm area for captions.
 
-Pipeline step 2. Paid: about 8 to 10 images for six lines. Needs an approved `lyrics.txt` or `script.txt` first (step 1 of [`gen-03-song.md`](gen-03-song.md) or [`gen-06-talking.md`](gen-06-talking.md)). Next: [`gen-03-song.md`](gen-03-song.md).
+Step 2. Paid: about 8 to 10 images for six lines, at $0.134 per 1K/2K image on Nano Banana Pro ([Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing), 2026-10-09). Needs an approved `lyrics.txt` or `script.txt` (step 1 of [`gen-03-song.md`](gen-03-song.md) or [`gen-06-talking.md`](gen-06-talking.md)). Method: [docs/02-character.md](../../docs/02-character.md). Next: [`gen-03-song.md`](gen-03-song.md).
 
-## Prompt for Claude Code
+## Prompt
 
-```
+```text
 The project folder is examples/my-video. BRIEF.md, lyrics.txt, script.txt, STORYBOARD.md,
 PROMPTS.md, costs.csv and every assets/ path below are inside it; docs/ and scripts/ are at the
 repo root. Run commands from the repo root.
-Read BRIEF.md, lyrics.txt (or script.txt) and assets/character/CHARACTER.md.
+Read BRIEF.md, lyrics.txt (or script.txt) and assets/character/CHARACTER.md. The per-row model
+prompt and the keyframe check this prompt refers to are in prompts/generate/gen-02-keyframes.md.
 Before every paid call, state the model, the provider, the number of calls or seconds and the
 list price, and wait for my OK. Log every paid call in costs.csv (date, step, model, provider,
-units, list price in USD, kept or rejected), rejected takes included.
+units, unit_price_usd, total_usd, kept, note), rejected takes included.
 
 1. Write STORYBOARD.md, one row per line:
    | id | line | seconds (from the timing table) | framing word | action as body positions |
@@ -36,12 +36,15 @@ units, list price in USD, kept or rejected), rejected takes included.
    Paste the canon block for the row's framing and the style sentence from CHARACTER.md word for word.
    Show me the total price first. Stop after the first 2 keyframes so I can check the likeness.
 
-3. Check every keyframe at full size against the list below. Fix a defect by editing only that
+3. Check every keyframe at full size against the keyframe check. Fix a defect by editing only that
    region of the image; keep the original file. Save to assets/keyframes/01.png, 02.png ...
    Log image, prompt, references and canon version in assets/keyframes/log.md.
 ```
 
-Keyframe check (run on every image):
+## Keyframe check
+
+Run it on every image:
+
 1. Open it at full size; a contact sheet hides defects.
 2. The signature trait is there, same shape and color as `ref.png`.
 3. The outfit matches `CHARACTER.md` garment by garment; no duplicated accessory.
@@ -54,7 +57,7 @@ Keyframe check (run on every image):
 
 ## Model prompt (per row)
 
-```
+```text
 The first reference image shows <NAME>. Use it for identity only: face, proportions, colors, outfit, <SIGNATURE DETAIL>.
 Do not copy its layout, panels, grey background or labels.
 <If image 2 is passed: The second reference image is an approved frame from the same video. Match the character's look in it.>
@@ -66,24 +69,12 @@ The <bottom | top> third of the frame is calm, empty <wall | floor | sky> for ca
 <STYLE SENTENCE>. No text, no letters, no logos.
 ```
 
-If a word must appear inside the scene (a sign, a page, a door), ask for a blank surface and let the edit print the word: "a blank white sign", "a paper calendar with an empty grid". The code can then spell it correctly and time it to the word.
+If a word must appear inside the scene (a sign, a page, a door), ask for a blank surface, such as "a blank white sign" or "a paper calendar with an empty grid", and let the edit print the word. The code spells it right and times it to the word.
 
-## Why each piece is there
+## Notes
 
-- **One world for every line.** The same place in every scene keeps the character and the light stable, and lets the viewer follow the song instead of the set.
-- **Character in frame from frame one.** The first frame is the hook; an empty opening loses the viewer.
-- **Close-ups for sung lines.** A locked frontal close-up is the easiest shot for a lip-sync model.
-- **Identity only, no layout.** A sheet passed as a reference can carry its grid, labels or lettering into the output, so the prompt says not to copy them.
-- **Framing word first, block by framing.** A close-up prompt that lists boots asks the model to show the boots.
-- **Action as body positions, expression in the still.** Picsart found Gemini keeps a neutral stance even when asked for action ([persona skill](https://github.com/PicsArt/gen-ai-skills/blob/main/skills/gen-ai-persona-creation/SKILL.md), MIT). Put the expression in the still, then animate.
-- **What the character wants.** A list of movements alone gives flat acting; a reason for the shot gives the movements a direction.
-- **Face clear, hands only when needed.** Hair, hands and props across the face spoil the lip-sync later, and every hand in frame is a chance for a wrong finger count.
-- **A calm caption zone written into the prompt.** Decide in the storyboard where the words go, then write the empty area and the subject's position into the prompt together. A blank surface for a printed word follows the same idea.
-- **"No text, no letters, no logos" last.** Nothing positive comes after the negative tail. Google suggests describing what you want instead of what you do not want ([Gemini docs](https://ai.google.dev/gemini-api/docs/image-generation)); the empty caption zone is written that way.
-- **Approved frame as a second reference.** Google: "include previously generated images in subsequent prompts to maintain consistency" ([Gemini docs](https://ai.google.dev/gemini-api/docs/image-generation)). Their example is a 360-degree view; that it helps across scenes is unverified.
-- **At most 5 character images.** Nano Banana Pro: "Up to 5 images of characters to maintain character consistency" (same page).
-- **Region fixes, keep the original.** Crop the region, redraw the crop, paste it back; a full regeneration risks the parts that were right.
-
-Price guide: Nano Banana Pro $0.134 per 1K/2K image ([Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing), Oct 2026). Six lines plus a few fixes is about 8-10 images.
-
-Sources: https://github.com/PicsArt/gen-ai-skills/blob/main/skills/gen-ai-persona-creation/SKILL.md , https://ai.google.dev/gemini-api/docs/image-generation , https://ai.google.dev/gemini-api/docs/pricing
+- Identity only, no layout: a sheet passed as a reference can carry its grid, labels or lettering into the output.
+- Put the expression in the still, then animate. Picsart found that Gemini keeps a neutral stance even when asked for action ([persona skill](https://github.com/PicsArt/gen-ai-skills/blob/main/skills/gen-ai-persona-creation/SKILL.md), MIT).
+- "No text, no letters, no logos" goes last, with nothing positive after it. Google suggests describing what you want instead of what you do not want ([Gemini docs](https://ai.google.dev/gemini-api/docs/image-generation)), which is why the caption zone is written as a calm, empty area.
+- The approved frame as image 2 follows Google's advice to "include previously generated images in subsequent prompts to maintain consistency" (same page). Nano Banana Pro takes "Up to 5 images of characters to maintain character consistency".
+- Fix a region, keep the original: crop the region, redraw the crop, paste it back. A full regeneration risks the parts that were right.

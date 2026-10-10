@@ -1,13 +1,13 @@
 # 00 Brief
 
-**What it does:** fixes what the video says on screen, for either way in. With existing footage it checks the licenses of your footage and audio, writes `lyrics.txt` and writes `BRIEF.md`. With a generated character it reads the `BRIEF.md` and `lyrics.txt` that the generation prompts wrote, lists the terms and AI labels that apply, and adds an "On screen" section. Either way the result is the plan the edit is built from: the hook, the counters, the board words, the outro and the credit line.
+**What it does:** fixes what the video says on screen. With existing footage it checks the licenses and writes `lyrics.txt` and `BRIEF.md`. With a generated character it adds the terms, the AI labels and an "On screen" section to the `BRIEF.md` the generation prompts wrote. Either way the result is the plan for the edit: the hook, the counters, the board words, the outro and the credit line.
 
-**What you should see:** `examples/my-video/BRIEF.md` and `examples/my-video/lyrics.txt`, a rights table with a source link for every claim, and a list of open questions. Nothing is downloaded or generated, and no paid service is called.
+**What you should see:** `examples/my-video/BRIEF.md`, `examples/my-video/lyrics.txt`, a rights table with a source link for every claim, and a list of open questions. Nothing is downloaded or generated, and no paid service is called.
 
-## Before you paste
+**Before you paste:**
 
-- **Existing footage** ([docs/05-or-use-existing-footage.md](../docs/05-or-use-existing-footage.md)): have a link or path for the footage and for the audio. They can be one file (a video with its own soundtrack, like the CDC clip in handwash-song or the film in wing-it). Know where the lyrics come from. Claude cannot listen to audio, so the words must come from you, from a published source, or from captions burned into the video. In the example, the CDC video's own burned-in captions gave the real lyric "Wash hands well each day", which the transcription later misheard.
-- **Generated character** ([prompts/generate/](generate/)): run this after [`gen-00-idea.md`](generate/gen-00-idea.md) has written `BRIEF.md` and the first part of [`gen-03-song.md`](generate/gen-03-song.md) (or [`gen-06-talking.md`](generate/gen-06-talking.md)) has written `lyrics.txt` (or `script.txt`). The board and counters must match sung or spoken words, so the words come first.
+- **Existing footage** ([docs/05-or-use-existing-footage.md](../docs/05-or-use-existing-footage.md)): have a link or path for the footage and for the audio. They can be one file, a video with its own soundtrack, as in handwash-song and wing-it. Know where the lyrics come from: Claude cannot listen to audio, so the words come from you, from a published source, or from captions burned into the video.
+- **Generated character:** run this after [`gen-00-idea.md`](generate/gen-00-idea.md) has written `BRIEF.md` and step 1 of [`gen-03-song.md`](generate/gen-03-song.md) (or [`gen-06-talking.md`](generate/gen-06-talking.md)) has written `lyrics.txt` (or `script.txt`). The board and counters must match the sung or spoken words, so the words come first.
 
 ## Prompt
 
@@ -51,7 +51,8 @@ Do these steps in order. Do not download or generate any media, and do not call 
 
 ## Notes
 
-- Public-domain video is easiest to share. Works made by U.S. federal employees as part of their jobs (CDC, NASA) are public domain, but agency logos are restricted, some agency material is made by contractors or licensed from third parties, and you may not imply endorsement. Wikimedia Commons hosts many of them, with the license stated on each file page. Stock sites like Pexels (https://www.pexels.com/license/) and Pixabay (https://pixabay.com/service/license-summary/) allow use in your video but restrict redistributing the raw files, so keep those files out of git.
-- Aim for about 30 s. The three examples run 21.5 to 32.5 s and render at delivery quality in 64.6 s to 1 min 43.3 s on a 2014 i7-4790, so a render fits into an iteration loop.
-- Four board slots fit across the 1000 px width at the example's sizes. Five need narrower slots or smaller type.
+- Public-domain video is the easiest to share. Works made by U.S. federal employees as part of their jobs (CDC, NASA) are public domain, but agency logos are restricted, some agency material comes from contractors or third parties, and you may not imply endorsement. Wikimedia Commons states the license on each file page.
+- Stock sites such as Pexels ([license](https://www.pexels.com/license/)) and Pixabay ([license](https://pixabay.com/service/license-summary/)) allow use in your video but restrict redistributing the raw files. Keep those files out of git.
+- Aim for about 30 s. The examples run 21.5 to 32.5 s and render in a few minutes, short enough for an iteration loop.
+- Four board slots fit across the 1000 px card at the example's sizes. Five need narrower slots or smaller type.
 - Next: [`edit/01-assets.md`](edit/01-assets.md).

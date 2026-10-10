@@ -1,14 +1,14 @@
 # 04 Review
 
-**What it does:** a separate reviewer pass. A fresh agent that did not write the edit takes snapshots at every lyric line and at every word, checks that each word lights on time, reads the frames at phone size, runs HyperFrames' layout and contrast check, and audits the code for anything that would break determinism. It writes a report and changes nothing.
+**What it does:** runs a separate reviewer that did not write the edit. It snapshots every lyric line and every word, checks that each word lights on time, reads the frames at phone size, runs HyperFrames' layout and contrast check, and audits the code for anything that breaks determinism. It writes a report and changes nothing.
 
-**What you should see:** `examples/my-video/REVIEW.md` with a findings table (severity, time, element, problem, evidence, suggested fix) and a list of what was checked and passed. No other file changes. You then decide what to fix and paste the fixes into the session that wrote the edit.
+**What you should see:** `examples/my-video/REVIEW.md` with a findings table (severity, time, element, problem, evidence, suggested fix) and the list of checks that passed. No other file changes. You decide what to fix and paste the fixes into the session that wrote the edit.
 
-## Before you paste
+**Before you paste:**
 
 - [`03-edit.md`](03-edit.md) is done and lint shows 0 errors.
-- Start a **new** Claude Code session (or ask for a subagent) so the reviewer has not seen the edit being written. A fresh reviewer knows only what the frames show, with no memory of what the code was meant to do.
-- Know what HyperFrames' `check` says about the example, so you can tell noise from problems. At 0.8.143 on `examples/handwash-song` it reports 2 contrast errors (`#ring-lbl` at 3.72:1 and `#credit` at 2.64:1, where WCAG AA asks for 4.5:1), contrast warnings on the grey not-yet-sung words, and `content_overlap` warnings for the moments when one lyric line fades out while the next fades in.
+- Start a **new** Claude Code session, or ask for a subagent. A reviewer that has not seen the edit being written knows only what the frames show.
+- Know the baseline. On `examples/handwash-song`, `check` at 0.8.143 reports 2 contrast errors (`#ring-lbl` at 3.72:1 and `#credit` at 2.64:1, where WCAG AA asks for 4.5:1), contrast warnings on the grey not-yet-sung words, and `content_overlap` warnings while one lyric line fades out as the next fades in.
 
 ## Prompt
 
@@ -49,5 +49,6 @@ Then stop.
 
 ## Notes
 
-- The determinism proof itself (two renders, identical frames) needs a render, so it lives in [`05-render.md`](05-render.md). This step catches the usual causes before you spend render time.
-- A snapshot of the example at 2.98 s, the exact start of the first word, shows "Wash" still grey. The highlight is a 0.1 s tween that begins at `word.start`, which is why step 2 samples at start + 0.12 s.
+- The determinism proof (two renders, identical frames) needs a render, so it lives in [`05-render.md`](05-render.md). This step catches the usual causes before you spend render time.
+- Why start + 0.12 s: the highlight is a 0.1 s tween that begins at `word.start`. A snapshot of handwash-song at 2.98 s, the exact start of the first word, still shows "Wash" grey.
+- Next: [`05-render.md`](05-render.md).

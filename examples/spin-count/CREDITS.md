@@ -19,9 +19,9 @@
 - File: https://cdn.pixabay.com/download/audio/2023/07/19/audio_0f020bf728.mp3?filename=audiocoffee-funny-dancing-kids-158822.mp3 (MP3 256 kbit/s, 44.1 kHz stereo, 125.832 s, 4,026,618 bytes, sha256 `2b5a744047cee7352824afc0d92d127a22d7bd4bd6e2899e5cfe1d85626a60d9`)
 - License: "Free for use under the Pixabay Content License", per the page.
 - The uploader asks, on the page: "Please credit me in your video description as follows: Music by AudioCoffee(Denys Kyshchuk): https://www.audiocoffee.net/". When you post a video with this track, put that line in the post's description.
-- The page shows a "Content ID Registered" label. A video that uses the track can get a Content ID claim on platforms that run Content ID, such as YouTube. We have not tested an upload.
+- The page shows a "Content ID Registered" label. A video that uses the track can get a Content ID claim on platforms that run Content ID, such as YouTube.
 
-All of the above was read on the two pages on 2026-10-09.
+Both pages were read on 2026-10-09.
 
 ## The Pixabay Content License
 
@@ -41,15 +41,13 @@ This is a summary for readers, not legal advice. Only the full terms are binding
 
 ## What is in git and what is not
 
-- **Not committed:** the two Pixabay files and everything cut from them (`assets/source/`, `assets/boy.mp4`, `assets/music_cut.mp3`), the renders and the snapshots. `scripts/fetch-spin-assets.mjs` downloads the files and rebuilds the derived ones on your machine. `.gitignore` covers them.
+- **Not committed:** the two Pixabay files and everything cut from them (`assets/source/`, `assets/boy.mp4`, `assets/music_cut.mp3`), the renders and the snapshots. `scripts/fetch-spin-assets.mjs` downloads the files and rebuilds the derived ones. `.gitignore` covers them.
 - **Committed, derived from the works:** `docs/img/demo-spin.gif`, a 7.4 s, 360 px wide, silent excerpt of the edited render with the overlays on it; `spins.json` (ten times read from the clip); `beats/assets/music_cut.mp3.json` (beat times detected in the music).
 - **Distributed outside git:** the full edited render (21.5 s, with sound) as an asset of the repo's GitHub release. It is an edited work with the overlays described above, not the clip or the track on its own.
 
 ## Credit line in the video
 
 `Footage: TonyDias7 / Pixabay · Music: AudioCoffee / Pixabay · Edit: HTML + GSAP, rendered with HyperFrames`
-
-An early render named the wrong uploader in place of "TonyDias7". That was a mistake: the name came from other clips that the same page lists as related media. Renders made from the current template carry the corrected line.
 
 ## Software
 

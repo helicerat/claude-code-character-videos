@@ -50,8 +50,8 @@ original file, and save it under the name in step 1. The script then uses it.
 
 License: Creative Commons Attribution 4.0
 (https://creativecommons.org/licenses/by/4.0/). Credit the film as
-"WING IT! (CC BY 4.0) Blender Foundation | studio.blender.org" and say that
-it was changed. Logos and trademarks are not covered by the license.
+"(CC) Blender Foundation | studio.blender.org", link the license and say
+that it was changed. Logos and trademarks are not covered by the license.
 
 Needs ffmpeg and ffprobe on PATH. Behind a proxy, set HTTPS_PROXY and
 NODE_USE_ENV_PROXY=1: Node's built-in fetch ignores HTTPS_PROXY otherwise.
@@ -78,7 +78,7 @@ const GSAP = {
   file: 'gsap.min.js',
   sha256: 'c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280',
 };
-// sha256 of the files the posted video was rendered from. Another ffmpeg or x264
+// sha256 of the files the release video was rendered from. Another ffmpeg or x264
 // build can give different bytes for the same frames; that is not an error.
 const REFERENCE = {
   'wing_v.mp4': 'c98d70b2b883ea9f79667ca7c16376d5fa48775dde35104e1f07999a2704c437',
@@ -102,8 +102,8 @@ const AUDIO_LEN = 32.5;
 const DUCK = { from: 19.8, to: 22.3, volume: 0.12 };
 const FADE = { start: 31.0, duration: 1.5 };
 
-// Write numbers the way the original Python build printed them (82.0, not 82),
-// so the printed command reads like the one the example was made with.
+// Print whole numbers with one decimal (82.0, not 82), so the printed command
+// matches the ffmpeg chains in examples/wing-it/README.md.
 const n = (x) => (Number.isInteger(x) ? x.toFixed(1) : String(x));
 
 function readShots(dir) {
@@ -142,7 +142,7 @@ function videoFilter(shots) {
   return parts.join('') + shots.map((_, i) => `[v${i}]`).join('') + `concat=n=${shots.length}:v=1:a=0[vout]`;
 }
 
-// x264 defaults otherwise (keyframes up to 250 frames apart), as in the posted video.
+// x264 defaults otherwise (keyframes up to 250 frames apart), as in the release video.
 const VIDEO_ARGS = (src, out, shots) => [
   '-y', '-i', src,
   '-filter_complex', videoFilter(shots),

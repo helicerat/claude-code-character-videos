@@ -5,11 +5,8 @@ node_modules/
 .env
 .env.*
 
-# Media and libraries that scripts/fetch-assets.mjs, fetch-spin-assets.mjs and
-# fetch-wing-assets.mjs download or make, frame grabs and contact sheets, and
-# generated media (character images, keyframes, song takes, scene clips) in any
-# subfolder of assets/. The CDC source clip, the Pixabay clip and track, the
-# WING IT! film (assets/source/), and everything cut from them stay out of git.
+# Media and libraries in any subfolder of assets/: what the fetch scripts
+# download or make, frame grabs, contact sheets and generated media.
 examples/*/assets/**/*.mp4
 examples/*/assets/**/*.mov
 examples/*/assets/**/*.webm
@@ -56,3 +53,6 @@ desktop.ini
 
 # Media generated from a prompt pasted at the repo root by mistake
 /assets/
+
+# ffmpeg repro output from docs/08
+/out.png

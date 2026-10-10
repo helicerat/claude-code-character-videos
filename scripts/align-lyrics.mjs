@@ -33,7 +33,7 @@ Options:
   --lyrics <file>   default: <exampleDir>/lyrics.txt
   --heard <file>    default: <exampleDir>/assets/whisper_verbose.json, or
                     <exampleDir>/assets/transcript.json when that is missing
-                    (what "npx hyperframes transcribe assets/song.mp3" writes).
+                    (what "npx hyperframes@0.8.143 transcribe assets/song.mp3" writes).
                     Accepts OpenAI/Groq verbose_json (words[]), the
                     openai-whisper Python JSON (segments[].words[]), or a
                     HyperFrames transcript.json ([{text,start,end}]).
@@ -136,7 +136,7 @@ function readHeard(file) {
   } else if (Array.isArray(j?.segments) && j.segments.some((s) => Array.isArray(s.words))) {
     words = j.segments.flatMap((s) => s.words ?? []); kind = 'openai-whisper segments[].words[]';
   } else if (Array.isArray(j?.transcription)) {
-    throw new CliError(`${rel(file)} is whisper.cpp JSON. Convert it first: npx hyperframes transcribe ${rel(file)} --dir <empty folder>, then pass that folder's transcript.json with --heard.`);
+    throw new CliError(`${rel(file)} is whisper.cpp JSON. Convert it first: npx hyperframes@0.8.143 transcribe ${rel(file)} --dir <empty folder>, then pass that folder's transcript.json with --heard.`);
   } else {
     throw new CliError(`${rel(file)}: unrecognized transcription format. Expected verbose_json with words[], or [{text,start,end}].`);
   }
@@ -162,7 +162,7 @@ main(async () => {
   const candidates = [path.join(dir, 'assets', 'whisper_verbose.json'), path.join(dir, 'assets', 'transcript.json')];
   const heardFile = path.resolve(values.heard ?? candidates.find((f) => existsSync(f)) ?? candidates[0]);
   if (!values.heard && !existsSync(heardFile)) {
-    throw new CliError(`no transcription found (looked for ${candidates.map(rel).join(' and ')}). Make one with scripts/transcribe-groq.mjs or "npx hyperframes transcribe assets/song.mp3 --model medium.en", or pass --heard <file>.`);
+    throw new CliError(`no transcription found (looked for ${candidates.map(rel).join(' and ')}). Make one with scripts/transcribe-groq.mjs or "npx hyperframes@0.8.143 transcribe assets/song.mp3 --model medium.en", or pass --heard <file>.`);
   }
   const outFile = path.resolve(values.out ?? path.join(dir, 'transcript.json'));
   const eol = eolOption(values.eol);

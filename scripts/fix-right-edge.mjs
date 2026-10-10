@@ -62,7 +62,7 @@ Options:
                        median Y'CbCr value of the two columns just left of
                        the strip in the sampled frames, which is the
                        background as the render encoded it (2 luma levels
-                       darker than the page color #f3eee5 in our renders).
+                       darker than the page color #f3eee5 in handwash-song).
   --flat <n>           for --mode auto: the largest spread, in luma levels
                        (0-255), that still counts as a flat edge (default:
                        12). The spread is p95 minus p5 of the two columns'
@@ -78,7 +78,7 @@ Options:
   --dry-run            measure and report, write nothing
   -h, --help           show this help
 
-Cause, as measured on our machine: ffmpeg 8.1.2 converts yuv420p to gbrp
+Cause: ffmpeg 8.1.2 (gyan.dev Windows build) converts yuv420p to gbrp
 with every column after the last multiple of 16 black (one-line repro:
 ffmpeg -f lavfi -i "color=c=white:s=1080x64,format=yuv420p" -frames:v 1
 -vf format=gbrp out.png). HyperFrames 0.8.143 runs that conversion on every

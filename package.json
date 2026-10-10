@@ -4,6 +4,18 @@
   "private": true,
   "type": "module",
   "description": "Make a short vertical video with an AI character, driven by Claude Code: idea, character, song or voice, animation, word timings, a motion-graphics edit written as HTML + GSAP, and a HyperFrames render.",
+  "keywords": [
+    "claude-code",
+    "claude-code-skill",
+    "hyperframes",
+    "gsap",
+    "ffmpeg",
+    "motion-graphics",
+    "vertical-video",
+    "karaoke",
+    "ai-video"
+  ],
+  "author": "helicerat",
   "license": "MIT",
   "repository": {
     "type": "git",

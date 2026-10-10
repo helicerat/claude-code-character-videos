@@ -1,149 +1,169 @@
 ---
 name: character-video
-description: Makes a short 1080x1920 video with a character, end to end, with a motion-graphics edit written as code. Two entry points: (A) generate an original character, keyframes, a song or voice and animated clips through a CLI or MCP the user logs into, with the price stated and the user's OK before every paid call and every take logged in costs.csv; (B) bring existing footage: a film scene with its sound, or a clip and a song or track. Both continue with timings (word timings aligned to lyrics, story events or marks read from frames, a beat grid), a motion-graphics edit in HTML + GSAP (karaoke, checklists, counters, flying words or numbers), a reviewer pass, a HyperFrames render and a right-edge fix. Use for a video with an AI character or mascot that sings or talks, a lyric or karaoke video, a "count the spins" video, a checklist over a short-film scene, or a clip and a song to turn into a short. Stops for review after the brief, before every paid call, after timings and before each render.
+description: Makes a short 1080x1920 video with a character and a motion-graphics edit written as code. Entry A generates a character, keyframes, a song or voice and animated clips through a CLI or MCP server the user logs into, with the price stated and an OK before every paid call. Entry B starts from existing footage and a song or track. Both continue with timings (words, beats, marks or story events), an HTML + GSAP edit, a reviewer pass and a HyperFrames render. Use for an AI character or mascot that sings or talks, a lyric or karaoke video, a count-the-moves video, a checklist over a film scene, or a clip and a song to turn into a short. Stops after the brief, before every paid call, after the timings and before each render.
 ---
 
 # character-video
 
-Runs the pipeline from the claude-code-character-videos repo (https://github.com/helicerat/claude-code-character-videos): idea, character, song or voice, animation, word timings, an edit written as code, render. The repo has three worked examples, all entry B. `examples/wing-it` is event-driven (a 30 s scene of a CC BY film cut to 9:16 shot by shot, no words and no beat: story events read from frames, a checklist whose items tick or cross as the story reaches them). `examples/handwash-song` is word-driven (lyrics, Whisper word timings, karaoke). `examples/spin-count` is mark-driven (no words: a beat grid from `npx hyperframes beats` and ten spin marks read from frames, a counter that fills as the marks pass). Read the `README.md` and `build/index.template.htm` of the one closer to the job before writing any edit. The generation steps (entry A) follow the repo's prompts in `prompts/generate/`, which were written from provider docs and have not been run by the repo's author: tell the user so before the first paid call, and expect to adjust.
+Runs the [claude-code-character-videos](https://github.com/helicerat/claude-code-character-videos) pipeline from idea to render. This file is the procedure and its stop points. Each step names the repo prompt that holds the exact commands; read it before you run the step.
+
+Pick the example closest to the job and read its `README.md` and `build/index.template.htm` before you write any edit:
+
+| Example | Timings from | Edit |
+|---|---|---|
+| `examples/handwash-song` | words: Whisper timestamps aligned to `lyrics.txt` | karaoke, a timer, board words with `x2` badges |
+| `examples/spin-count` | marks read from frames, plus a beat grid | counter pills that fill as the marks pass |
+| `examples/wing-it` | story events read from frames, in a film cut to 9:16 shot by shot | a checklist that ticks or crosses as the story reaches each item |
+
+Entry A follows `prompts/generate/`, which is written from provider docs. Before the first paid call, tell the user the prompts may need tuning.
 
 ## Requirements
 
 - Node 22 or newer, ffmpeg and ffprobe on PATH.
-- A clone of the repo. The steps call its scripts: `scripts/fetch-assets.mjs`, `fetch-spin-assets.mjs`, `fetch-wing-assets.mjs`, `transcribe-groq.mjs`, `align-lyrics.mjs`, `build.mjs`, `probe.mjs`, `framemd5-diff.mjs`, `fix-right-edge.mjs`. Each has `--help`; read it before the first use. If the current directory is not the repo, ask the user for the path to their clone and run the scripts from there with the project folder as the argument.
-- HyperFrames through npx, always pinned: `npx hyperframes@0.8.143`. Do not install packages globally yourself.
-- Entry A only: access to the generation models through a CLI or MCP server that the user installs and logs into (Picsart `gen-ai`, Higgsfield, fal; see `docs/00-how-it-works.md`, "How Claude Code reaches the paid models"). The Picsart CLI installs globally (`npm install -g @picsart/gen-ai`); ask the user to run that and the login themselves.
+- A clone of the repo. Every script in `scripts/` has `--help`; read it before first use. If the current directory is not the repo, ask for the path to the clone.
+- HyperFrames through npx, always pinned: `npx hyperframes@0.8.143`. Install nothing globally yourself.
+- Entry A: a generation CLI or MCP server (Picsart `gen-ai`, Higgsfield, fal; see `docs/00-how-it-works.md`). The user installs it and logs in.
 
-## Ground rules for the whole run
+## Ground rules
 
-- Set `HYPERFRAMES_NO_TELEMETRY=1` in every shell that runs HyperFrames. Pass `--describe false` to every `snapshot` (otherwise frames go to Gemini when `GEMINI_API_KEY` is set). Do not run `npx hyperframes feedback` or `npx hyperframes usage`.
-- The project folder is `examples/<name>` in the repo unless the user picks another. Layout: `BRIEF.md`, `lyrics.txt` (or `script.txt`), `assets/` (media, gitignored, subfolders included), `transcript.json` (word-driven), `marks.json` plus `beats/` (mark-driven, like `spins.json` in spin-count) or `events.json` (event-driven, as in wing-it, with `shots.json` when a film is cut shot by shot), `build/index.template.htm` (source of truth; keep the `.htm` extension, because HyperFrames Studio writes `data-hf-id` attributes into every `*.html` file in the project folder), `index.html` (generated by `scripts/build.mjs`), `renders/`, `snapshots/`, and for entry A also `assets/character/`, `assets/keyframes/`, `assets/song/`, `assets/scenes/`, `STORYBOARD.md`, `PROMPTS.md`, `costs.csv`.
-- **Money.** Before every paid call (image, song take, voice line, video clip), state the model, the provider, the number of calls or seconds and the list price, and wait for the user's OK. One OK covers one stated batch, nothing more. Log every paid call in `costs.csv`, rejected takes included. Keep a running total and say it at each stop.
-- **Keys.** API keys and logins stay with the user. Read keys from the environment (`GROQ_API_KEY`, `FAL_KEY`); never print them, write them to a file, or paste them into a prompt.
-- If you or the user run `npx hyperframes@0.8.143 preview`, `index.html` comes back modified. Regenerate it with `node scripts/build.mjs <project>` and review `git diff` before any commit. Stop a background preview with `npx hyperframes@0.8.143 preview <project> --stop`.
+- `HYPERFRAMES_NO_TELEMETRY=1` in every shell that runs HyperFrames. `--describe false` on every `snapshot` (otherwise frames go to Gemini when `GEMINI_API_KEY` is set). Never run `npx hyperframes feedback` or `usage`.
+- **Money.** Before every paid call, state the model, the provider, the number of calls or seconds and the list price, then wait for an OK. One OK covers one stated batch. Log every paid call in `costs.csv`, rejected takes included, and give the running total at each stop.
+- **Keys** stay with the user. Read `GROQ_API_KEY` and `FAL_KEY` from the environment; never print, write or paste them.
+- **Ask before** uploading audio to an API, installing a model or catalog item, any paid generation, and every render.
+- **The template is the source.** Edit `build/index.template.htm` (keep `.htm`: HyperFrames Studio writes `data-hf-id` into every `*.html` in the project) and run `node scripts/build.mjs <project>` to write `index.html`. After any `preview`, rebuild and review `git diff`.
 - Never commit media (`*.mp4`, `*.webm`, `*.mp3`, `*.wav`, generated images, `gsap.min.js`, `renders/`, `snapshots/`). Check `git status` before any commit.
-- Probe every input and output. Never assume a sample rate.
-- Ask before: uploading audio to an API, installing a model, any paid generation, installing a catalog item, and every render.
-- Content rules (repo `docs/01-idea.md`, section 6): an original character, no real people, no existing characters, no studio or franchise names in prompts; no products in anything aimed at children ("every scene is an ad slot" is for adult audiences only); no view counters you did not measure; the AI labels each platform needs.
+- Probe every input and output with `node scripts/probe.mjs`. Never assume a sample rate.
+- Content (`docs/01-idea.md`, section 6): an original character, no real people or existing characters, no studio or franchise names in prompts, no products in anything aimed at children, no view counts the user did not measure, and the AI label each platform needs.
+
+The project folder is `examples/<name>` unless the user picks another. Its timing data is `transcript.json`, `marks.json` plus `beats/`, or `events.json` (with `shots.json` for a film cut shot by shot).
 
 ## Step 0: choose the entry point
 
-Ask which one, unless the user already said:
+Ask, unless the user already said:
 
-- **A, generate**: the user wants a new character and has (or will set up) a generation service. Go to Entry A.
-- **B, existing footage**: the user brings a clip and a song or a music track (or one video with its soundtrack), or wants public-domain or free stock footage found. Go to Entry B. Then ask which kind of timing drives the edit: **words** (a sung or spoken text: S1 word timing), **beats and marks** (no words, effects on a repeated visible moment and the beat: S1-M) or **story events** (no words, effects on the moments a scene's story turns: S1-E).
+- **A, generate:** a new character through a generation service.
+- **B, existing footage:** a clip and a song or track, one video with its own soundtrack, or public-domain or free stock footage to find. Then ask what drives the timing: **words** (S1), **beats and marks** (S1-M) or **story events** (S1-E).
 
-## Entry A: generate the character, the song and the clips
+## Entry A: generate
 
-Follow the prompt files in the repo; each one has the exact wording, the model prompts and why each rule is there.
+| # | Prompt in `prompts/generate/` | What it makes | Cost | Stops |
+|---|---|---|---|---|
+| 1 | `gen-00-idea.md` | 3 scored formats from the user's links and numbers, then `BRIEF.md` | free | pick a format |
+| 2 | step 1 of `gen-03-song.md` or `gen-06-talking.md` | lyrics or script, one line per scene, the hook from 0:00 | free | approve the words |
+| 3 | `gen-01-character.md` | 4 pitches, base image, edits, `sheet.png`, `ref.png`, `CHARACTER.md` | paid | pick; cost; base image; cost |
+| 4 | `gen-02-keyframes.md` | `STORYBOARD.md`, one keyframe per line | paid | storyboard; cost; first 2 keyframes |
+| 5 | `gen-03-song.md` | 2 takes at a time, each checked word by word, at most 6 | paid | cost per batch; after 6 takes |
+| 6 | `gen-04-cut-song.md` | one audio piece per scene, cut in gaps between words | free | |
+| 7 | `gen-05-animate.md` or `gen-06-talking.md` | `PROMPTS.md`, a 2-scene pilot, then batches of about 5 | paid, most of the bill | prompts; cost; pilot; cost per batch |
 
-1. **Idea** (`prompts/generate/gen-00-idea.md`, free). From the user's niche, audience, platforms, budget ceiling and reference links (never invent a view count; never scrape), score 3 formats with the scorecard in `docs/01-idea.md`. **STOP:** wait for a pick. Then write `BRIEF.md`.
-2. **Lyrics or script** (step 1 of `gen-03-song.md` for a song, step 1 of `gen-06-talking.md` for a voice, free). One line per scene, the hook sung from 0:00, numbers spelled as sung, every on-screen number or word sung in its line. **STOP:** wait for approval.
-3. **Character** (`gen-01-character.md`, paid). Pitch 4 characters. **STOP:** wait for a pick. **COST STOP**, then the base image. Edits change one thing each; never re-roll an approved face. **COST STOP**, then `sheet.png` and `ref.png`. Write `assets/character/CHARACTER.md` (frozen appearance block, blocks by framing, palette hex, style sentence, changelog).
-4. **Keyframes** (`gen-02-keyframes.md`, paid). Write `STORYBOARD.md`. **STOP:** wait for approval. **COST STOP** for the whole set, generate the first 2, **STOP** for a likeness check, then the rest. `ref.png` as image 1, never the sheet; at most 5 character images per call. Run the keyframe check on every image.
-5. **Song takes** (`gen-03-song.md`, paid). **COST STOP**, then 2 takes. Transcribe each take blind with `npx hyperframes@0.8.143 transcribe <take> --model medium.en --dir <scratch folder>` (never `--dir` on the project folder) or with Groq after the user approves the upload, then diff with `node scripts/align-lyrics.mjs <project> --heard <transcript> --dry-run`. Reject a take with any missing number or step word. At most 6 takes, then **STOP** and ask. Copy the accepted take to `assets/song/song.mp3`. For a talking character, `gen-06-talking.md` does the same per voice line.
-6. **Cut the song** (`gen-04-cut-song.md`, free). One piece per scene, cut in gaps between words, 1.8 to 30.2 s each (Seedance's audio reference limit), aiming at 4 to 5 s.
-7. **Animate** (`gen-05-animate.md` or `gen-06-talking.md`, paid, most of the bill). Write all scene prompts into `PROMPTS.md`. **STOP:** wait for approval. **COST STOP**, then a pilot of 2 scenes at draft resolution. Measure each sung take's lag against the master song. **STOP:** the user judges the pilot. Then batches of about 5 scenes, each with its own **COST STOP**. After two identical failed retries, change one variable instead of paying for a third.
-8. **Assemble.** Trim each clip to its scene, then either join them into `assets/footage.mp4` (re-encoded 1088 wide, a multiple of 16, with a keyframe every 30 frames) or keep one muted `<video>` per scene, each also encoded at a width that is a multiple of 16. The master song becomes `assets/song.mp3`. Then run `prompts/00-brief.md` to add the "On screen" section and the credit line to `BRIEF.md`, and continue with the shared steps.
+- Never re-roll an approved face; each edit changes one thing. `ref.png` is image 1, never the sheet. At most 5 character images per call.
+- Transcribe every take blind (`npx hyperframes@0.8.143 transcribe <take> --model medium.en --dir <scratch folder>`, or Groq after the user approves the upload) and diff with `node scripts/align-lyrics.mjs <project> --heard <transcript> --dry-run`. Reject a take with any missing number or step word.
+- After two identical failed takes, change one variable instead of paying for a third.
 
-## Entry B: bring existing footage and a song
+Then assemble: trim each clip to its scene and join them into `assets/footage.mp4` (1088 wide, a keyframe every 30 frames), or keep one muted `<video>` per scene at a width that is a multiple of 16. The master song becomes `assets/song.mp3`. Run `prompts/00-brief.md` to add the "On screen" section and the credit line, then continue with S1.
 
-1. **Brief** (`prompts/00-brief.md`). Collect: footage source, audio source, lyrics source (word-driven only), the one sentence the video proves (for a mark-driven video, what is counted and the rule for one mark, for example "his back faces the camera"; for an event-driven video, the plan the story breaks, for example a pre-flight checklist). Claude cannot hear audio; lyrics must come from the user, a published source, or captions burned into the video. Licenses: for each source give license, credit line, redistribution rules, logo and endorsement rules, with links; mark anything unconfirmed as unverified. For stock sites (Pixabay, Pexels) copy the uploader from the author box next to the Download button, not from related-media cards, and note any "Content ID Registered" label on music. For CC BY films (Blender Studio's open movies) use the film page's attribution line, link the license and say what was changed; logos and trademarks are excluded. Write `lyrics.txt` (word-driven: exact sung words, one sung line per line, repeats in full) and `BRIEF.md`: sources and credit line; format; hook (kicker + headline of at most 8 words); counters; passes and round numbers; board words (3 to 5, each with its line); outro number and how it is computed; open questions. **STOP A:** show the license table, `lyrics.txt` and `BRIEF.md`; wait for approval.
-2. **Assets** (`prompts/edit/01-assets.md`). Download sources into `assets/source/` (Wikimedia Commons: the upload.wikimedia.org original-file URL with a descriptive User-Agent; Pixabay: the file the Download button gives, or the CDN URL with a descriptive User-Agent and `Referer: https://pixabay.com/`, as `scripts/fetch-spin-assets.mjs` does; one file per source, never bulk; behind a proxy set `NODE_USE_ENV_PROXY=1`). Probe each source; extract six frames and look for burned captions, logos, end cards, bars, cuts. Propose crop and trim; ask if the choice is not obvious. If the clip should play slower, add `setpts=PTS/<factor>` before `fps=30` (spin-count: `setpts=PTS/0.85`) and remember that marks read in the source must be divided by the factor. For a 16:9 film in a 9:16 video, cut at the film's own shot changes and crop each shot around its subject; keep a shot whose action spans the frame as a 16:9 card over a blurred copy (`shots.json` and `scripts/fetch-wing-assets.mjs` in wing-it, `docs/05-or-use-existing-footage.md`). Turn down a swear or a line you do not want with `volume=enable='between(t,<from>,<to>)':volume=0.12` and say so in the brief. Make `assets/footage.mp4` (trim, crop, scale to 1088 or 1024 px wide, a multiple of 16, with `scale=1088:-2:flags=lanczos`, `fps=30`, `libx264 -crf 16 -preset slow -pix_fmt yuv420p -g 30 -keyint_min 30 -movflags +faststart -an`) and `assets/song.mp3` (same trim, `-vn -ac 2 -ar 44100 -c:a libmp3lame -q:a 2`). Copy GSAP 3.14.2 into `assets/gsap.min.js`. Probe both outputs; flag duration differences above 0.1 s and sample rates other than 44100 or 48000.
+## Entry B: existing footage
 
-## Shared steps (both entries)
+1. **Brief** (`prompts/00-brief.md`). Collect the footage, the audio, the lyrics source (words only) and the one sentence the video proves: for marks, what is counted and the rule for one mark; for events, the plan the story breaks. Claude cannot hear audio, so lyrics come from the user, a published source or burned-in captions. For licenses:
+   - give each source's license, credit line, redistribution and logo or endorsement rules, with links; mark anything unconfirmed as unverified
+   - Pixabay or Pexels: copy the uploader from the author box next to the Download button, not from related-media cards; note a "Content ID Registered" label on music
+   - CC BY films (Blender Studio's open movies): use the film page's attribution line, link the license, say what was changed; logos and trademarks are excluded
+
+   **STOP A.** Show the license table, `lyrics.txt` and `BRIEF.md`. Wait for approval.
+
+2. **Assets** (`prompts/edit/01-assets.md`): download, probe, crop and trim, then make `assets/footage.mp4` (1088 or 1024 wide, a keyframe every second, no audio), `assets/song.mp3` and `assets/gsap.min.js`. Pixabay downloads need a descriptive User-Agent and `Referer: https://pixabay.com/`, as `scripts/fetch-spin-assets.mjs` sends. Three recipes from the examples:
+   - slow a clip with `setpts=PTS/<factor>` before `fps=30` (spin-count: 0.85), and divide marks read in the source by the factor
+   - put a 16:9 film into 9:16 by cutting at its own shot changes and cropping each shot around its subject, with a wide shot as a 16:9 card over a blurred copy (`shots.json` and `scripts/fetch-wing-assets.mjs`)
+   - turn down a swear with `volume=enable='between(t,<from>,<to>)':volume=0.12`, and say so in the brief
+
+## Shared steps
 
 ### S1. Word timing (STOP B)
 
-1. Transcribe the final song, after asking which engine: Groq (`node scripts/transcribe-groq.mjs <project>/assets/song.mp3 <project>/assets/whisper_verbose.json`) or local (`npx hyperframes@0.8.143 transcribe <project>/assets/song.mp3 --engine parakeet --language en --dir <project>/asr`, after `npx hyperframes@0.8.143 models install parakeet` once). **Always point `--dir` at a scratch folder.** On Windows the whisper.cpp engine may not be installed; prefer Parakeet there.
-2. `node scripts/align-lyrics.mjs <project>` (with `--heard` for the HyperFrames output). It writes `transcript.json` with text from `lyrics.txt` and times from the ASR, flagging `heard` substitutions and `interpolated` words.
-3. Report substitutions, missed lyric words, dropped extra words, totals (word counts must match `lyrics.txt`), first start, last end. Flag non-increasing starts, words under 0.05 s or over 1.5 s, gaps over 1 s inside a line, runs of interpolated words. If a lyric word is missing from the audio, say whether the take skipped it or `lyrics.txt` is wrong; do not edit `lyrics.txt` yourself.
+Run `prompts/edit/02-word-timing.md`. Ask which engine first: Groq (`scripts/transcribe-groq.mjs`, uploads the audio) or local Parakeet through `npx hyperframes@0.8.143 transcribe --engine parakeet`. **Always point `--dir` at a scratch folder**, never the project: `transcribe` overwrites `transcript.json` and rewrites `const TRANSCRIPT` in the HTML there. `node scripts/align-lyrics.mjs <project>` then writes `transcript.json` with text from `lyrics.txt` and times from the ASR. Never edit `lyrics.txt` yourself.
 
-**STOP B.** Show the report. Wait for approval of `transcript.json`.
+**STOP B.** Show the substitutions, missed and dropped words, word counts and sanity checks. Wait for approval.
 
-### S1-M. Beats and marks, for a video without words (STOP B)
+### S1-M. Beats and marks (STOP B)
 
-1. Beats: `npx hyperframes@0.8.143 beats <project>` writes `<project>/beats/<audio>.json` (69 beats, 188 bpm, 4 s on spin-count; it does not touch the HTML). Report the beat count, first beat and mean spacing. Use a grid (`BEAT0`, `BEAT`) only if the spacing is steady; otherwise inline the beat times.
-2. Marks: follow `docs/06-word-timing.md`, "Timings without words". Make overview contact sheets of the source at 4 fps under `<project>/assets/frames/` (`fps=4,scale=180:-2,tile=8x2`), read every sheet, list candidates; make a close-up sheet of every source frame for 0.6 s around each candidate and pick the peak. Write `<project>/marks.json` with source times and, if the footage is slowed, the factor.
-3. Check: extract the frame at each final mark into one sheet and read it. Also list every moment that looks like the event but has no mark. On spin-count this pass found that 2 of 10 marks landed mid-turn and that 2 back views had no mark.
+Method: `docs/06-word-timing.md`, "Timings without words".
 
-**STOP B.** Show the marks table, the check sheet and the beat summary. Wait for approval.
+1. `npx hyperframes@0.8.143 beats <project>` writes `beats/<audio>.json` and leaves the HTML alone. Use a grid (`BEAT0`, `BEAT`) only if the spacing is steady.
+2. Read contact sheets of the source at 4 fps (`fps=4,scale=180:-2,tile=8x2`, under `assets/frames/`), then every frame for 0.6 s around each candidate, and pick the peak. Write `marks.json` with source times and the slow-down factor.
+3. Read the frame at each mark on one sheet. List every moment that looks like the event but has no mark.
 
-### S1-E. Story events, for a scene without words (STOP B)
+**STOP B.** Show the marks table, the check sheet and the beat summary.
 
-1. Follow `docs/06-word-timing.md`, "Story events: stepping through frames". Make overview sheets of the cut footage (or the source window) at 4 fps under `<project>/assets/frames/`, and write down the story beats in order: what happens, and about when.
-2. For each beat, make a close-up sheet of every frame for 1 to 1.5 s around it and pick the frame where it happens: a cut, a hit, a reveal. Decide whether the event lands on the cut or on the action inside the shot, and note which.
-3. Write `<project>/events.json`: for each event the time in the footage, the time in the source, and what the frame shows. Group what the edit will count or tick (wing-it: six checklist items, seven gadgets) and list the other cues (countdowns, shakes, cards, the outro).
-4. Check: extract the frame at each event time into one sheet and read it. Report every event that lands before or after its action, and by how much (wing-it: four of six checklist items land 0.2 to 0.5 s off the action, on a cut or just after it).
+### S1-E. Story events (STOP B)
 
-**STOP B.** Show the events table and the check sheet. Wait for approval.
+Method: `docs/06-word-timing.md`, "Story events: stepping through frames".
+
+1. Read sheets of the cut footage at 4 fps and write down the story beats in order.
+2. For each beat, read every frame for 1 to 1.5 s around it and pick the frame. Note whether the event lands on the cut or on the action inside the shot.
+3. Write `events.json`: time in the footage, time in the source, what the frame shows. Group what the edit counts or ticks.
+4. Read the frame at each event on one sheet. Report every event that lands off its action, and by how much.
+
+**STOP B.** Show the events table and the check sheet.
 
 ### S2. Edit
 
-1. Create `<project>/build/index.template.htm` from `examples/handwash-song/build/index.template.htm` (word-driven) `examples/spin-count/build/index.template.htm` (mark-driven) or `examples/wing-it/build/index.template.htm` (event-driven). Word-driven: keep the `/*TRANSCRIPT*/[]` placeholder, `LINES` and `SLOTS` as word indices, one paused GSAP timeline. Mark-driven: keep the marks as one array of source times divided by the slow-down factor, the same numbers as `marks.json`, positions computed from constants, one paused GSAP timeline; `scripts/build.mjs` copies such a template to `index.html` when the folder has no `transcript.json`. Event-driven: keep the events as arrays at the top of the script (`ITEMS`, `GADGETS` in wing-it), the same numbers as `events.json`, and copy the template the same way. Change content, sizes and colors to fit `BRIEF.md`. A full-frame 9:16 generated clip moves the text layers into the calm thirds the keyframes left free.
-2. Layers, bottom to top. Word-driven: footage (`<video id="footage" muted playsinline>`), `<audio id="song">`, masked headline reveal, timer ring and counter from the first sung word to the last, progress bar over the whole duration, round number before each pass, karaoke one line at a time, board words that fly into slots on first occurrence and get an `x2` badge on repeats, outro, credit line. Mark-driven (spin-count): full-frame footage, `<audio id="music">`, a shade behind the top text, a row of counter pills, a title that pulses on every second beat, for each mark a giant number that pops over the subject and flies into its pill (which then turns on) and a sticker word, a progress bar, an outro card with the total, credit line. Event-driven (wing-it): footage cut shot by shot, `<audio id="sound">`, a plan card whose chips turn into a tick or a cross on their events (`to` on the chip, the score text with `tl.set`), labels, flashes and shakes on events, a counter for repeated events, an outro over the last frame shown as an `<img>` when the footage ends, credit line.
-3. Timing: every sung event keyed to `TRANSCRIPT[i].start` or `.end`; in a mark-driven edit every counted event keyed to its mark and every pulse to the beat grid; in an event-driven edit every reaction keyed to its event. Literal seconds only for the intro before the first sung word, short offsets relative to a word, and the total duration. Root `data-duration` equals `END` and is no longer than the shorter of footage and song. Print the `LINES` and `SLOTS` tables. Every on-screen number is computed from `transcript.json` or cited in `BRIEF.md`.
-4. HyperFrames contract: `gsap.timeline({ paused: true })` registered synchronously as `window.__timelines["<data-composition-id>"]`; no `Math.random`, `Date.now`, `performance.now`, `requestAnimationFrame`, timers or `fetch`; never play, pause or seek media from script; no `translate(-50%,-50%)` on elements GSAP moves; no tweening `visibility`/`display` on `.clip`; no DOM measuring inside tweens; every `fromTo` from-state of a not-yet-visible element hidden (`opacity: 0` or `scale: 0`), and no `fromTo` on a property an intro tween animates from hidden (use `to`; spin-count's pill bump broke this and the posted render shows the pills at full size for 4 frames); no timeline callback (`onUpdate`, `onComplete`) that writes to the page: tween the property instead, for a number on screen the element's `textContent` with `snap: { textContent: 1 }` (a DOM write from `onUpdate` made HyperFrames' draw-element self-check fail on the example and doubled the render time); GSAP from `assets/gsap.min.js`; fonts Poppins and Inter unless a local `@font-face` is added, always named with the `font-family` property (HyperFrames 0.8.143 neither fetches nor lints a family named only in the `font:` shorthand). The compile log must count every family you use (`Injected deterministic @font-face rules for N requested font families`). If HyperFrames skills are installed (`hyperframes-core`), follow them too. Do not run `hyperframes init`.
-5. Before hand-animating any effect, search the catalog: `npx hyperframes@0.8.143 catalog <words>`. Report what you found. Ask before `npx hyperframes@0.8.143 add <name>`; catalog items are mostly 1920x1080 demos and need resizing and rewiring to `TRANSCRIPT`.
-6. `node scripts/build.mjs <project>`, then `npx hyperframes@0.8.143 lint <project>`: 0 errors required; explain each warning (`nested_structure_needs_subcomposition` is expected for a single-file composition: 2 on handwash-song, 1 on spin-count, 1 on wing-it).
+Run `prompts/edit/03-edit.md`, with the matching example's template as the reference. `docs/07-the-edit.md` walks through all three edits layer by layer.
+
+- Keep the data shape: the `/*TRANSCRIPT*/[]` placeholder with `LINES` and `SLOTS` as word indices; or one array of marks, the same numbers as `marks.json`; or event arrays (`ITEMS`, `GADGETS` in wing-it), the same numbers as `events.json`. With no placeholder and no `transcript.json`, `build.mjs` copies the template unchanged.
+- Key every reaction to a word, mark, beat or event. Literal seconds only for the intro, short offsets relative to an event, and the total duration. The root `data-duration` equals `END` and is no longer than the shorter of footage and song.
+- Every number on screen is computed from the data or cited in `BRIEF.md`.
+- Follow the composition contract in the repo's `AGENTS.md`: one paused GSAP timeline on `window.__timelines`, no clocks or randomness, no media control from script, no DOM writes from timeline callbacks, hidden `fromTo` from-states, fonts named with `font-family`.
+- Search the catalog (`npx hyperframes@0.8.143 catalog <words>`) before hand-animating an effect. Ask before `add`.
+- Build, then lint: 0 errors, each warning explained.
 
 ### S3. Review (STOP C, before any render)
 
-Run this as a separate pass. If subagents are available, give it to a fresh subagent with read-only instructions (`prompts/edit/04-review.md`); otherwise do it yourself and change nothing during the pass.
+Run `prompts/edit/04-review.md` as a separate pass: a fresh subagent if available, otherwise yourself, changing nothing during the pass. For a video without words, swap the snapshot times:
 
-1. Word-driven: snapshot each lyric line at first word start + 0.15 s and at the next line's start - 0.05 s; snapshot every word at start + 0.12 s. Mark-driven: snapshot 0 and 0.05 s (nothing may show before its intro), each mark + 0.3 s (the right number on screen) and each mark + 0.7 s (the right pill on). Event-driven: snapshot 0 and 0.05 s, and each event + 0.2 s (the item in its new state, the score right, no text over other text). Use `-o <project>/snapshots/review-lines` and `-o <project>/snapshots/review-words`, always with `--describe false`.
-2. Check: right line on screen, target word lit and the next one not yet, no two lines readable at once, lyrics match `lyrics.txt`, board slots and badges at the right occurrences, every number recomputed and matching.
-3. Scale frames to 360 px wide and read them. Flag unreadable text and key text in the bottom strip where phone apps draw controls.
-4. `npx hyperframes@0.8.143 check <project>`: list findings and say which are real. On `examples/handwash-song` at 0.8.143 it reports 2 contrast errors (ring label, credit line), contrast warnings on unlit words and overlap warnings during line crossfades.
-5. Footage: captions left after the crop, logos, watermarks, end cards with logos, lettering a generation model drew.
-6. Template audit for the contract in S2.
-7. Write `<project>/REVIEW.md`: findings table (severity, time, element, problem, evidence, fix) and the list of passed checks.
+- mark-driven: 0 and 0.05 s (nothing shows before its intro), each mark + 0.3 s (the right number) and + 0.7 s (the right pill on)
+- event-driven: 0 and 0.05 s, and each event + 0.2 s (the item in its new state, the score right, no text over text)
 
-**STOP C.** Show `REVIEW.md` and `snapshots/review-lines/contact-sheet.jpg`. Apply only the fixes the user picks, rebuild, lint, re-snapshot the affected times. Do not render until the user says so.
+**STOP C.** Show `REVIEW.md` and the review contact sheet. Apply only the fixes the user picks, rebuild, lint and re-snapshot the affected times. Do not render until the user says so.
 
-### S4. Draft render, edge fix and determinism (STOP D)
+### S4. Draft render, edge fix, determinism (STOP D)
 
-1. `node scripts/build.mjs <project>` and lint again.
-2. `npx hyperframes@0.8.143 render <project> -q draft -o <project>/renders/draft-a.raw.mp4`, timed. If the log says `drawElement self-verification failed; re-rendering via screenshot`, look for a timeline callback that writes to the page and compare the two frames HyperFrames left in `hf-de-verify-fail-*` in the system temp folder; delete those folders afterwards.
-3. `node scripts/fix-right-edge.mjs <project>/renders/draft-a.raw.mp4 <project>/renders/draft-a.mp4`. On the repo author's machine every render has an 8 px black strip at the right edge (x 1072 to 1079). It is an FFmpeg 8.1.2 bug that HyperFrames triggers: ffmpeg's x86 SIMD conversion from yuv420p to gbrp blacks out every column after the last multiple of 16, and HyperFrames converts every captured frame (and every extracted video frame) that way. Seen with the gyan.dev Windows build; other builds untested. The script measures the strip and picks a fill (`--mode auto`, the default): a flat color when the two columns left of the strip are flat (handwash-song: 4 luma levels of spread), or `smear`, repeating the last good column, when footage or a gradient reaches the edge (spin-count: 68 to 76 levels; wing-it: 79 to 136), where a flat fill would show a seam. `--mode fill` or `--mode smear` forces one. It re-encodes the video and copies the audio; report which mode it picked. With no strip it copies the file unchanged. Also look at the right edge of the footage in a frame of the render: a dark band there means the footage is not a multiple of 16 wide.
-4. `node scripts/probe.mjs` on it: 1080x1920, fps, frame count = duration x fps, AAC 48 kHz audio present, duration within one frame of `data-duration`.
-5. Sound: `volumedetect` mean volume (near -91 dB means silent, usually an `<audio>` without an id); `silencedetect=n=-35dB:d=0.25` on the song or music file in `assets/` and on the render, boundaries within 0.05 s.
-6. Render the draft again to `draft-b.raw.mp4` and compare the raw files: `node scripts/framemd5-diff.mjs <project>/renders/draft-a.raw.mp4 <project>/renders/draft-b.raw.mp4 --audio`. The decoded audio must be identical. Video frames may differ, as long as the differences are invisible and confined to stretches between keyframes: measure with ffmpeg's `psnr` filter (run it from inside `renders/`, since a drive letter in `stats_file` breaks the filter) and require a minimum PSNR above about 50 dB over the differing frames. Two delivery renders of `examples/handwash-song` on Windows with a GPU matched on 530 of 924 frames, minimum PSNR 51.6 dB, identical audio (earlier pairs: 520 to 529).
+Run steps 1 to 7 of `prompts/edit/05-render.md`.
 
-**STOP D.** Show timings, the edge report, probe, sound checks and the frame comparison. Wait until the user has watched `draft-a.mp4` and approves.
+- Fix the right edge after every render with `scripts/fix-right-edge.mjs`. With ffmpeg 8.1.2 (gyan.dev Windows build), HyperFrames 0.8.143 renders carry an 8 px black strip at x 1072 to 1079. Report the mode `--mode auto` picked; with no strip the script copies the file unchanged.
+- A dark band at the right edge of the footage itself means the footage is not a multiple of 16 wide.
+- Compare raw renders, never fixed ones. Audio must be identical; differing frames must stay above about 50 dB PSNR.
+- `drawElement self-verification failed` in the log means a timeline callback writes to the page.
+
+**STOP D.** Show the render time, edge report, probe, sound checks and frame comparison. Wait until the user has watched `draft-a.mp4` and approves.
 
 ### S5. Delivery render
 
-1. `npx hyperframes@0.8.143 render <project> -q delivery -o <project>/renders/<name>.raw.mp4`, timed, then `node scripts/fix-right-edge.mjs <project>/renders/<name>.raw.mp4 <project>/renders/<name>.mp4`.
-2. Probe and sound-check `<name>.mp4` as in S4. Report both sizes in bytes and MB (HyperFrames' own summary prints MiB).
-3. If the user wants a README preview: a 6 to 8 s GIF of the most telling stretch, 360 px wide, under 5 MB (full-frame footage needs about 12 fps and 128 colors for that: spin-count's 7.4 s GIF is 4,048,679 bytes and wing-it's 7 s GIF 3,228,266 bytes), with no logo or end card and no dark band at the edge of the footage in it, made with the palettegen/paletteuse command in `docs/08-render-and-qa.md` section 8. GitHub limits video attachments to 10 MB on free plans (issues, pull requests, comments); a full video can go up as a release asset (under 2 GiB per file).
-4. Hand off: output path, duration, render times, sizes, `lint` result, determinism result, the credit line, the cost total from `costs.csv` (entry A), and anything you could not check.
+Run steps 8 to 10 of `prompts/edit/05-render.md`. A README preview GIF is 6 to 8 s, 360 px wide, under 5 MB, with no logo or end card. Hand off: output path, duration, render times, sizes, lint and determinism results, the credit line, the cost total from `costs.csv` (entry A), and anything you could not check.
+
+## Reference values (HyperFrames 0.8.143)
+
+| Example | Length | Frames | Lint warnings | Edge fix | Expected `check` findings |
+|---|---|---|---|---|---|
+| wing-it | 32.5 s | 975 | 1 | smear | transparent chip glyphs before their events (by design); contrast errors on the white tick, the RESULT label and the credit line |
+| spin-count | 21.5 s | 645 | 1 | smear | contrast errors on the unlit pill numbers and the credit line (2.91:1) |
+| handwash-song | 30.8 s | 924 | 2 | fill | contrast errors on `#ring-lbl` (3.72:1) and `#credit` (2.64:1); warnings on unlit words and on overlap during line crossfades |
+
+The lint warnings are `nested_structure_needs_subcomposition`, harmless for a single-file composition. wing-it writes its altitude number from `onUpdate`, against the contract, to match its published render; do not copy it.
 
 ## costs.csv
 
 One row per paid call, written as it happens:
 
-```
+```csv
 date,step,model,provider,units,unit_price_usd,total_usd,kept,note
 2026-10-09,character,gemini-3-pro-image,google,1 image,0.134,0.134,yes,base image
 ```
 
-`units` is images, takes, characters or seconds of video. List prices from the provider pages; say where a price came from if it is not a list price. The repo's list-price estimate for a 30-second singing mascot is about $4.3 to $15.4 per pass, mostly animation; expect two to three times that with retakes.
-
-## Reference numbers (HyperFrames 0.8.143)
-
-**examples/wing-it.** 32.5 s at 1080x1920 and 30 fps (975 frames). Footage: film 82.0 to 112.0 s of WING IT! (Blender Studio, CC BY 4.0, 1920x1080, 24 fps) in 12 shots, 11 cropped to 608x1080 and one kept as a 16:9 card, scaled to 1080x1920 at 30 fps (29.967 s, 899 frames); sound: film 82.0 to 114.5 s with one swear at 12 percent. `npm run fetch:wing` 51 to 55 s, output byte for byte the files the posted video was rendered from. 6 checklist items and 7 gadgets read from frames. Template 227 lines; lint 0 errors, 1 warning. Delivery render 1 min 43.3 s (drawElement capture), plus 42.4 s for the edge fix (smear). Raw 34,624,061 bytes; after the fix 27,310,022 bytes. Its altitude number is written from `onUpdate`, against the contract above; the render's self-check passed anyway. `check`: transparent chip glyphs before their events (by design) and contrast errors on the white tick, the RESULT label and the credit line.
-
-**examples/spin-count.** 21.5 s at 1080x1920 and 30 fps (645 frames). Footage: a 2160x3840, 24 fps, 16.708 s Pixabay clip scaled to 1080x1920 and slowed to 0.85x (19.667 s, 590 frames); music: the first 22 s of a 125.8 s Pixabay track. `npm run fetch:spin` 56 s. 69 beats, mean spacing 0.3191 s (188 bpm); 10 marks, 8 on a back view, 2 mid-turn, and 2 back views unmarked. Template 132 lines; lint 0 errors, 1 warning. Delivery render 94 s from this repo (screenshot capture), plus 36 s for the edge fix. Raw 42,024,651 bytes; after the edge fix (smear) 33,169,040 bytes. `check`: contrast errors on the unlit pill numbers and the credit line (2.91:1).
-
-**examples/handwash-song.** 30.8 s at 1080x1920 and 30 fps (924 frames). Delivery render 64.6 s with drawElement capture (all four self-checks passed), 86.8 s for all of `npm run render`, on Windows 10, i7-4790, 16 GB RAM, GTX 1650, Node 24.18.0, ffmpeg 8.1.2; 109 to 133 s with the earlier callback counter, which forced screenshot capture. Raw output about 9.7 MB (9,666,279 bytes in the latest run), H.264 plus AAC 48 kHz stereo; after the edge fix (flat fill) about 7.0 MB (7,037,382 bytes); both change by a few KB between renders. Edge fix about 11 to 25 s. Two full-length delivery renders: 530 of 924 frames identical, minimum PSNR 51.6 dB, audio identical. Footage `cat.mp4` 1088x672. `check`: contrast errors on `#ring-lbl` (3.72:1) and `#credit` (2.64:1). Whisper (Groq whisper-large-v3) misheard "hands well" as "and sell" on both passes and added a "you" after the music ended; alignment kept 38 words from 2.98 s to 24.48 s.
+`units` is images, takes, characters or seconds of video. Use list prices from the provider pages, and name the source of any other price. Retakes typically double or triple the single-pass estimate in `docs/00-how-it-works.md`.
 
 ## Installing this skill
 
-Copy the folder `skills/character-video` from the repo into one of these, then start a new Claude Code session:
-
-- all your projects: `~/.claude/skills/character-video/`
-- one project: `<project>/.claude/skills/character-video/`
+Copy `skills/character-video` into `~/.claude/skills/` (all projects) or `<project>/.claude/skills/` (one project), then start a new Claude Code session.
 
 ```bash
 mkdir -p ~/.claude/skills && cp -r skills/character-video ~/.claude/skills/
@@ -154,4 +174,4 @@ New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse skills\character-video "$HOME\.claude\skills\"
 ```
 
-Then ask for it by name ("use character-video on examples/my-video") or describe the job ("make a video with an AI mascot that sings about brushing teeth", "make a lyric video from this clip and song", "count the jumps in this clip, to this track", "put a pre-flight checklist over this short-film scene").
+Ask for it by name ("use character-video on examples/my-video") or describe the job: "make a video with an AI mascot that sings about brushing teeth", "make a lyric video from this clip and song", "count the jumps in this clip, to this track", "put a pre-flight checklist over this short-film scene".

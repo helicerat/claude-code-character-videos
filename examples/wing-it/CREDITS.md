@@ -16,7 +16,7 @@ The licensing page says the work of the Wing It! project "is licensed under the 
 
 `(CC) Blender Foundation | studio.blender.org`
 
-It excludes all logos (including the Blender, Wing It! and Creative Commons logos and sponsor logos) and associated trademarks from the license. The page names no exception for the soundtrack. We saw no logo in the 30 seconds used here (film 1:22 to 1:52).
+It excludes all logos (including the Blender, Wing It! and Creative Commons logos and sponsor logos) and associated trademarks from the license. The page names no exception for the soundtrack. The 30 seconds used here (film 1:22 to 1:52) show no logo.
 
 Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/), in short: you may copy, share and adapt the work for any purpose, commercial use included, as long as you credit the creator, link the license, say whether you changed the work, and do not suggest that the licensor endorses you or your use. You may not add terms or technical measures that stop others from doing what the license allows.
 
@@ -27,7 +27,7 @@ Both pages were read on 2026-10-09. This is a summary for readers, not legal adv
 - **Picture:** 30 seconds of the film (82.0 to 112.0 s), cut at the film's own 12 shot changes. Eleven shots are cropped to a 608x1080 window around their subject; one (107.0 to 110.83 s) is kept whole as a 1080x608 card over a blurred, darkened copy of itself. Everything is scaled to 1080x1920 and converted to 30 fps. The last frame is held as a still for 2.5 s at the end. Motion graphics are drawn over all of it (a checklist card, a countdown, an altitude meter, warnings, a gadget counter, a tape, an outro).
 - **Sound:** the film's soundtrack from 82.0 to 114.5 s. A shouted swear at film 1:42 to 1:44 is turned down to 12 percent, and the last 1.5 s fade out. HyperFrames re-encodes it as 48 kHz AAC.
 
-The exact cut is in [`shots.json`](shots.json), the ffmpeg chains in [README.md](README.md#reproduce).
+The exact cut is in [`shots.json`](shots.json), the ffmpeg chains in [README.md](README.md#rebuild).
 
 ## Credit line in the video
 
@@ -41,7 +41,7 @@ This repo and the videos made with it are not affiliated with or endorsed by Ble
 
 ## What is in git and what is not
 
-- **Not committed:** the film and everything cut from it (`assets/source/`, `assets/wing_v.mp4`, `assets/wing_a.mp3`, `assets/last.jpg`), the renders and the snapshots. CC BY 4.0 would allow sharing them; the repo keeps media out of git anyway, as for the other examples, and `scripts/fetch-wing-assets.mjs` rebuilds them on your machine.
+- **Not committed:** the film and everything cut from it (`assets/source/`, `assets/wing_v.mp4`, `assets/wing_a.mp3`, `assets/last.jpg`), the renders and the snapshots. CC BY 4.0 would allow sharing them, but the repo keeps all media out of git. `scripts/fetch-wing-assets.mjs` rebuilds them.
 - **Committed, derived from the work:** `docs/img/demo-wing.gif`, a 7 s, 360 px wide, silent excerpt of the edited render (2.6 to 9.6 s) with the overlays on it; `shots.json` and `events.json` (times read from the film, with short descriptions of what the frames show).
 - **Distributed outside git:** the full edited render (32.5 s, with sound) as `wing-it.mp4`, an asset of the repo's GitHub release v0.1.0, with the credit line above in the frame.
 

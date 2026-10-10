@@ -37,7 +37,7 @@ scripts/align-lyrics.mjs next, which keeps the timings and takes the words
 from lyrics.txt.
 
 This step is optional. The free local route is
-  npx hyperframes transcribe assets/song.mp3 --model medium.en
+  npx hyperframes@0.8.143 transcribe assets/song.mp3 --model medium.en
 which writes assets/transcript.json next to the audio; align-lyrics.mjs
 picks it up when there is no whisper_verbose.json. Do not pass --dir with
 the example folder: HyperFrames writes transcript.json there (replacing the
