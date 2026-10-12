@@ -1,8 +1,8 @@
-# claude-code-character-videos
+# cuecut
 
-A pipeline for making a short vertical video with an AI character: Claude Code drives every step, the edit is written as code (HTML + GSAP), and [HyperFrames](https://github.com/heygen-com/hyperframes) renders it to MP4.
+Short vertical videos where every animation lands on its cue. A pipeline for making one with an AI character: Claude Code drives every step, the edit is written as code (HTML + GSAP), and [HyperFrames](https://github.com/heygen-com/hyperframes) renders it to MP4.
 
-[![CI](https://github.com/helicerat/claude-code-character-videos/actions/workflows/ci.yml/badge.svg)](https://github.com/helicerat/claude-code-character-videos/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Node >=22](https://img.shields.io/badge/node-%3E%3D22-339933?logo=nodedotjs&logoColor=white)](package.json) [![HyperFrames 0.8.143](https://img.shields.io/badge/HyperFrames-0.8.143-111111)](https://github.com/heygen-com/hyperframes) [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/character-video/SKILL.md)
+[![CI](https://github.com/helicerat/cuecut/actions/workflows/ci.yml/badge.svg)](https://github.com/helicerat/cuecut/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Node >=22](https://img.shields.io/badge/node-%3E%3D22-339933?logo=nodedotjs&logoColor=white)](package.json) [![HyperFrames 0.8.143](https://img.shields.io/badge/HyperFrames-0.8.143-111111)](https://github.com/heygen-com/hyperframes) [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/character-video/SKILL.md)
 
 ## How it works
 
@@ -37,9 +37,9 @@ List prices on 2026-10-09; check them before you pay. Overview: [docs/00-how-it-
     <th><a href="examples/handwash-song/README.md">handwash-song</a></th>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/wing-it.mp4"><img src="docs/img/demo-wing.gif" width="260" alt="A checklist over a cartoon rocket launch; chips turn green at liftoff."></a></td>
-    <td align="center"><a href="https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/spin-count.mp4"><img src="docs/img/demo-spin.gif" width="260" alt="A 3D boy spins; each spin's number flies into a counter pill."></a></td>
-    <td align="center"><a href="https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/handwash-song.mp4"><img src="docs/img/demo.gif" width="260" alt="A cartoon cat washes; lyrics light up word by word."></a></td>
+    <td align="center"><a href="https://github.com/helicerat/cuecut/releases/download/v0.1.0/wing-it.mp4"><img src="docs/img/demo-wing.gif" width="260" alt="A checklist over a cartoon rocket launch; chips turn green at liftoff."></a></td>
+    <td align="center"><a href="https://github.com/helicerat/cuecut/releases/download/v0.1.0/spin-count.mp4"><img src="docs/img/demo-spin.gif" width="260" alt="A 3D boy spins; each spin's number flies into a counter pill."></a></td>
+    <td align="center"><a href="https://github.com/helicerat/cuecut/releases/download/v0.1.0/handwash-song.mp4"><img src="docs/img/demo.gif" width="260" alt="A cartoon cat washes; lyrics light up word by word."></a></td>
   </tr>
   <tr>
     <td>A pre-flight checklist over a film scene. Chips tick or cross as the story reaches each item.<br><br><b>32.5 s</b> · timed by story events<br><sub>Footage and sound: WING IT! (CC) Blender Foundation | studio.blender.org, CC BY 4.0, cut to 9:16 and edited.</sub></td>
@@ -55,8 +55,8 @@ Click a GIF for the MP4 with sound. All three use existing footage, so they need
 You need Node 22 or newer, ffmpeg and ffprobe on PATH, and network access on the first run. Nothing to `npm install`: HyperFrames runs through npx.
 
 ```bash
-git clone https://github.com/helicerat/claude-code-character-videos.git
-cd claude-code-character-videos
+git clone https://github.com/helicerat/cuecut.git
+cd cuecut
 
 export HYPERFRAMES_NO_TELEMETRY=1        # PowerShell: $env:HYPERFRAMES_NO_TELEMETRY = "1"
 npx hyperframes@0.8.143 browser ensure   # Chrome Headless Shell, once

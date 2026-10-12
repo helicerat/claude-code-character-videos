@@ -54,7 +54,7 @@ Pages:
   https://pixabay.com/music/happy-childrens-tunes-funny-dancing-kids-158822/
 `;
 
-const USER_AGENT = `claude-code-character-videos-fetch/0.1 (https://github.com/helicerat/claude-code-character-videos; downloads one example clip and one music track) node/${process.versions.node}`;
+const USER_AGENT = `cuecut-fetch/0.1 (https://github.com/helicerat/cuecut; downloads one example clip and one music track) node/${process.versions.node}`;
 // The CDN serves both files without it; it is the referer a browser would send.
 const REFERER = 'https://pixabay.com/';
 

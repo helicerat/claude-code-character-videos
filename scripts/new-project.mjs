@@ -12,7 +12,7 @@ const GSAP = {
   url: 'https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js',
   sha256: 'c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280',
 };
-const USER_AGENT = `claude-code-character-videos-new/0.1 (https://github.com/helicerat/claude-code-character-videos) node/${process.versions.node}`;
+const USER_AGENT = `cuecut-new/0.1 (https://github.com/helicerat/cuecut) node/${process.versions.node}`;
 const DURATION = 12;
 
 const HELP = `

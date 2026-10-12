@@ -1,5 +1,5 @@
 {
-  "name": "claude-code-character-videos",
+  "name": "cuecut",
   "version": "0.2.0",
   "private": true,
   "type": "module",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/helicerat/claude-code-character-videos.git"
+    "url": "git+https://github.com/helicerat/cuecut.git"
   },
   "engines": {
     "node": ">=22"

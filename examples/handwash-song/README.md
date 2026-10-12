@@ -4,7 +4,7 @@ Karaoke over CDC's "Happy Handwashing Song", a public-domain cartoon in which a 
 
 | | |
 |---|---|
-| Video | [handwash-song.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/handwash-song.mp4), 30.8 s, 1080x1920, 30 fps, with sound |
+| Video | [handwash-song.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/handwash-song.mp4), 30.8 s, 1080x1920, 30 fps, with sound |
 | Source | CDC "Happy Handwashing Song", public domain |
 | Timed by | word timestamps, aligned to the lyrics |
 | Pipeline steps | 1 and 5 to 7 (idea, timings, edit, render); steps 2 to 4 are replaced by the cartoon |

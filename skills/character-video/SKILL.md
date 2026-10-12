@@ -5,7 +5,7 @@ description: Makes a short 1080x1920 video with a character and a motion-graphic
 
 # character-video
 
-Runs the [claude-code-character-videos](https://github.com/helicerat/claude-code-character-videos) pipeline from idea to render. This file is the procedure and its stop points. Each step names the repo prompt that holds the exact commands; read it before you run the step.
+Runs the [cuecut](https://github.com/helicerat/cuecut) pipeline from idea to render. This file is the procedure and its stop points. Each step names the repo prompt that holds the exact commands; read it before you run the step.
 
 Pick the example closest to the job and read its `README.md` and `build/index.template.htm` before you write any edit:
 

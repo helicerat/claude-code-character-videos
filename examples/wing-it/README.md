@@ -4,7 +4,7 @@ A pre-flight checklist laid over 30 seconds of WING IT!, Blender Studio's 2023 o
 
 | | |
 |---|---|
-| Video | [wing-it.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/wing-it.mp4), 32.5 s, 1080x1920, 30 fps, with sound |
+| Video | [wing-it.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/wing-it.mp4), 32.5 s, 1080x1920, 30 fps, with sound |
 | Source | WING IT! (Blender Studio, 2023), film 1:22 to 1:52, CC BY 4.0 |
 | Timed by | story events read from frames |
 | Pipeline steps | 5 to 7 (timings, edit, render); steps 2 to 4 are replaced by the film |
