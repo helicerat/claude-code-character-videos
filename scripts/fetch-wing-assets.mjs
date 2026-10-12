@@ -62,7 +62,7 @@ Pages:
 `;
 
 // Wikimedia asks API and upload clients to send a descriptive User-Agent.
-const USER_AGENT = `claude-code-character-videos-fetch/0.1 (https://github.com/helicerat/claude-code-character-videos; downloads one CC BY example film) node/${process.versions.node}`;
+const USER_AGENT = `cuecut-fetch/0.1 (https://github.com/helicerat/cuecut; downloads one CC BY example film) node/${process.versions.node}`;
 
 const FILM = {
   label: 'WING IT! from Wikimedia Commons',

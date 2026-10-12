@@ -1,0 +1,9 @@
+{
+  "what": "Marks for this project, in seconds of the composition. scripts/build.mjs writes the marks array into index.html as MARKS. Replace the times with moments you read from frames of your own footage, then rebuild.",
+  "marks": [
+    { "t": 2.0, "label": "the setup" },
+    { "t": 4.0, "label": "the twist" },
+    { "t": 6.0, "label": "the payoff" },
+    { "t": 8.0, "label": "the hook back" }
+  ]
+}

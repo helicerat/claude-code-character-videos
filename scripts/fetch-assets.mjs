@@ -44,7 +44,7 @@ Credit CDC as the source. Do not imply CDC endorsement or use the CDC logo.
 `;
 
 // Wikimedia asks API and upload clients to send a descriptive User-Agent.
-const USER_AGENT = `claude-code-character-videos-fetch/0.1 (https://github.com/helicerat/claude-code-character-videos; downloads one public-domain example clip) node/${process.versions.node}`;
+const USER_AGENT = `cuecut-fetch/0.1 (https://github.com/helicerat/cuecut; downloads one public-domain example clip) node/${process.versions.node}`;
 
 const SOURCE = {
   url: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Happy_Handwashing_Song.webm',

@@ -4,7 +4,7 @@ A spin counter over a stock clip of an animated 3D boy hopping and turning in fr
 
 | | |
 |---|---|
-| Video | [spin-count.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/spin-count.mp4), 21.5 s, 1080x1920, 30 fps, with sound |
+| Video | [spin-count.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/spin-count.mp4), 21.5 s, 1080x1920, 30 fps, with sound |
 | Source | a Pixabay clip labelled AI generated, played at 0.85x, and a Pixabay music track |
 | Timed by | spin marks read from frames, and a beat grid |
 | Pipeline steps | 5 to 7 (timings, edit, render); steps 2 to 4 are replaced by stock files |

@@ -220,9 +220,9 @@ The repo commits no video. The full renders are release assets:
 
 | File | Size |
 |---|---|
-| [wing-it.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/wing-it.mp4) | 27.3 MB |
-| [spin-count.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/spin-count.mp4) | 33 MB |
-| [handwash-song.mp4](https://github.com/helicerat/claude-code-character-videos/releases/download/v0.1.0/handwash-song.mp4) | 7.0 MB |
+| [wing-it.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/wing-it.mp4) | 27.3 MB |
+| [spin-count.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/spin-count.mp4) | 33 MB |
+| [handwash-song.mp4](https://github.com/helicerat/cuecut/releases/download/v0.1.0/handwash-song.mp4) | 7.0 MB |
 
 A release file can be up to 2 GiB ([about releases](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases)). Video attachments to issues, pull requests and comments are capped at 10 MB on free plans and 100 MB on paid plans ([GitHub docs](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files)).
 

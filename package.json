@@ -1,6 +1,6 @@
 {
-  "name": "claude-code-character-videos",
-  "version": "0.1.0",
+  "name": "cuecut",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Make a short vertical video with an AI character, driven by Claude Code: idea, character, song or voice, animation, word timings, a motion-graphics edit written as HTML + GSAP, and a HyperFrames render.",
@@ -13,18 +13,21 @@
     "motion-graphics",
     "vertical-video",
     "karaoke",
-    "ai-video"
+    "ai-video",
+    "starter-template"
   ],
   "author": "helicerat",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/helicerat/claude-code-character-videos.git"
+    "url": "git+https://github.com/helicerat/cuecut.git"
   },
   "engines": {
     "node": ">=22"
   },
   "scripts": {
+    "new": "node scripts/new-project.mjs",
+    "test": "node --test tests/*.test.mjs",
     "fetch": "node scripts/fetch-assets.mjs examples/handwash-song",
     "transcribe": "node scripts/transcribe-groq.mjs examples/handwash-song/assets/song.mp3 examples/handwash-song/assets/whisper_verbose.json --force",
     "align": "node scripts/align-lyrics.mjs examples/handwash-song",

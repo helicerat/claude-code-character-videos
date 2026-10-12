@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-// build/index.template.htm + transcript.json -> index.html
+// build/index.template.htm + transcript.json (+ marks.json) -> index.html
 // HyperFrames renders index.html as is, so the word timings are inlined into it.
+// A /*MARKS*/[] placeholder is filled from marks.json the same way (the
+// starter project from scripts/new-project.mjs uses it).
 // A template without the transcript placeholder, in a folder without
 // transcript.json, is copied as is (examples/spin-count: its times are spin
 // marks and a beat grid written into the template).
@@ -13,6 +15,7 @@ import path from 'node:path';
 import { CliError, cli, detectEol, eolOption, main, readJson, rel, resolveExampleDir, writeText } from './lib.mjs';
 
 const PLACEHOLDER = '/*TRANSCRIPT*/[]';
+const MARKS_PLACEHOLDER = '/*MARKS*/[]';
 
 const HELP = `
 Usage: node scripts/build.mjs [exampleDir] [options]
@@ -25,12 +28,17 @@ A template with no ${PLACEHOLDER} placeholder, in an example folder with no
 transcript.json, is copied to index.html unchanged. examples/spin-count works
 this way: its times are spin marks and a beat grid written into the template.
 
+A ${MARKS_PLACEHOLDER} placeholder is replaced with the "marks" array of
+marks.json ({ t, label } per mark, t in seconds of the composition). A
+template without it ignores marks.json.
+
 Arguments:
   exampleDir           example folder (default: examples/handwash-song)
 
 Options:
   --template <file>    default: <exampleDir>/build/index.template.htm
   --transcript <file>  default: <exampleDir>/transcript.json
+  --marks <file>       default: <exampleDir>/marks.json
   --out <file>         default: <exampleDir>/index.html
   --check              write nothing; exit 1 if index.html is out of date
   --eol <mode>         auto (keep the existing file's line endings), lf or crlf
@@ -42,6 +50,7 @@ const { values, positionals } = cli({
   options: {
     template: { type: 'string' },
     transcript: { type: 'string' },
+    marks: { type: 'string' },
     out: { type: 'string' },
     check: { type: 'boolean' },
     eol: { type: 'string', default: 'auto' },
@@ -69,7 +78,27 @@ main(async () => {
       : '';
     throw new CliError(`template not found: ${rel(templateFile)}.${hint}`);
   }
-  const template = readFileSync(templateFile, 'utf8');
+  let template = readFileSync(templateFile, 'utf8');
+  const marksNote = [];
+  const mAt = template.indexOf(MARKS_PLACEHOLDER);
+  if (mAt >= 0) {
+    if (template.indexOf(MARKS_PLACEHOLDER, mAt + 1) >= 0) throw new CliError(`${rel(templateFile)} has ${MARKS_PLACEHOLDER} more than once.`);
+    const marksFile = path.resolve(values.marks ?? path.join(dir, 'marks.json'));
+    const data = readJson(marksFile, 'marks');
+    const list = Array.isArray(data) ? data : data?.marks;
+    if (!Array.isArray(list) || list.length === 0) throw new CliError(`${rel(marksFile)} needs a non-empty "marks" array of { t, label }.`);
+    const marks = list.map((m, i) => {
+      if (!Number.isFinite(m?.t) || m.t < 0 || (m.label !== undefined && typeof m.label !== 'string')) {
+        throw new CliError(`${rel(marksFile)} mark #${i} needs t (seconds, a number >= 0) and an optional label (string): ${JSON.stringify(m)}`);
+      }
+      return m.label === undefined ? { t: m.t } : { t: m.t, label: m.label };
+    });
+    for (let i = 1; i < marks.length; i++) {
+      if (marks[i].t < marks[i - 1].t) throw new CliError(`${rel(marksFile)} marks must be in time order: #${i} (${marks[i].t} s) comes before #${i - 1} (${marks[i - 1].t} s).`);
+    }
+    template = template.slice(0, mAt) + inlineJson(marks) + template.slice(mAt + MARKS_PLACEHOLDER.length);
+    marksNote.push(`${marks.length} marks`);
+  }
   const at = template.indexOf(PLACEHOLDER);
 
   // Write (or, with --check, compare) index.html.
@@ -91,7 +120,7 @@ main(async () => {
   };
 
   if (at < 0 && !values.transcript && !existsSync(transcriptFile)) {
-    return emit(template, `no ${PLACEHOLDER} placeholder and no transcript.json, template copied as is`);
+    return emit(template, marksNote.length ? marksNote[0] : `no ${PLACEHOLDER} placeholder and no transcript.json, template copied as is`);
   }
   if (at < 0) throw new CliError(`${rel(templateFile)} has no ${PLACEHOLDER} placeholder. Write it where the word array goes: const TRANSCRIPT = ${PLACEHOLDER};`);
   if (template.indexOf(PLACEHOLDER, at + 1) >= 0) throw new CliError(`${rel(templateFile)} has ${PLACEHOLDER} more than once.`);
@@ -107,7 +136,8 @@ main(async () => {
   const flagged = raw.filter((w) => w.interpolated).length;
 
   const html = template.slice(0, at) + inlineJson(words) + template.slice(at + PLACEHOLDER.length);
-  const code = emit(html, values.check ? `${words.length} words` : `${words.length} words, ${words[0].start} s -> ${words[words.length - 1].end} s`);
+  const summary = values.check ? `${words.length} words` : `${words.length} words, ${words[0].start} s -> ${words[words.length - 1].end} s`;
+  const code = emit(html, [summary, ...marksNote].join(', '));
   if (flagged && !values.check) console.log(`note: ${flagged} word(s) in transcript.json were not heard and have interpolated times. See the align-lyrics report.`);
   return code;
 });

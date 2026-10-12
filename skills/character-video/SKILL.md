@@ -5,7 +5,7 @@ description: Makes a short 1080x1920 video with a character and a motion-graphic
 
 # character-video
 
-Runs the [claude-code-character-videos](https://github.com/helicerat/claude-code-character-videos) pipeline from idea to render. This file is the procedure and its stop points. Each step names the repo prompt that holds the exact commands; read it before you run the step.
+Runs the [cuecut](https://github.com/helicerat/cuecut) pipeline from idea to render. This file is the procedure and its stop points. Each step names the repo prompt that holds the exact commands; read it before you run the step.
 
 Pick the example closest to the job and read its `README.md` and `build/index.template.htm` before you write any edit:
 
@@ -35,7 +35,7 @@ Entry A follows `prompts/generate/`, which is written from provider docs. Before
 - Probe every input and output with `node scripts/probe.mjs`. Never assume a sample rate.
 - Content (`docs/01-idea.md`, section 6): an original character, no real people or existing characters, no studio or franchise names in prompts, no products in anything aimed at children, no view counts the user did not measure, and the AI label each platform needs.
 
-The project folder is `examples/<name>` unless the user picks another. Its timing data is `transcript.json`, `marks.json` plus `beats/`, or `events.json` (with `shots.json` for a film cut shot by shot).
+The project folder is `projects/<name>` unless the user picks another. Create it with `npm run new -- <name>`: a starter edit that lints and renders on placeholder media, with marks in `marks.json` (the `/*MARKS*/[]` placeholder). Replace the media and the edit; keep the build and the contract. Its timing data is `transcript.json`, `marks.json` plus `beats/`, or `events.json` (with `shots.json` for a film cut shot by shot).
 
 ## Step 0: choose the entry point
 
