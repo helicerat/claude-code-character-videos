@@ -2,7 +2,7 @@
 
 A pipeline for making a short vertical video with an AI character: Claude Code drives every step, the edit is written as code (HTML + GSAP), and [HyperFrames](https://github.com/heygen-com/hyperframes) renders it to MP4.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Node >=22](https://img.shields.io/badge/node-%3E%3D22-339933?logo=nodedotjs&logoColor=white)](package.json) [![HyperFrames 0.8.143](https://img.shields.io/badge/HyperFrames-0.8.143-111111)](https://github.com/heygen-com/hyperframes) [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/character-video/SKILL.md)
+[![CI](https://github.com/helicerat/claude-code-character-videos/actions/workflows/ci.yml/badge.svg)](https://github.com/helicerat/claude-code-character-videos/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Node >=22](https://img.shields.io/badge/node-%3E%3D22-339933?logo=nodedotjs&logoColor=white)](package.json) [![HyperFrames 0.8.143](https://img.shields.io/badge/HyperFrames-0.8.143-111111)](https://github.com/heygen-com/hyperframes) [![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/character-video/SKILL.md)
 
 ## How it works
 
@@ -83,6 +83,16 @@ Run each with `npm run <name>`. Each `render` script renders, then fixes the rig
 
 Run an example first to check your toolchain.
 
+### Start from a blank project
+
+```bash
+npm run new -- my-first-short            # -> projects/my-first-short
+npx hyperframes@0.8.143 lint projects/my-first-short
+npx hyperframes@0.8.143 snapshot projects/my-first-short --at 0,0.05,2,4,6,8,11 --describe false
+```
+
+`npm run new` copies [`templates/starter`](templates/starter) and makes 12 seconds of placeholder footage and silence with ffmpeg, so the project lints and renders before you have any media. The edit has an intro, one beat per mark and an outro. Its timings live in `marks.json`, and `scripts/build.mjs` writes them into `index.html`. Swap in your own clip, track and marks, following the project's `README.md`. Media in `projects/*/assets/` is gitignored.
+
 ### Prompts, one step at a time
 
 [prompts/](prompts/README.md) has a prompt per step. Paste them into Claude Code from the repo root, in order; each stops for you at least once. With generation, start with [`generate/gen-00-idea.md`](prompts/generate/gen-00-idea.md), run [`generate/`](prompts/generate) for steps 1 to 4, then [`00-brief.md`](prompts/00-brief.md). With existing footage, start with `00-brief.md`. Both continue with [`edit/`](prompts/edit) for steps 5 to 7.
@@ -116,9 +126,12 @@ examples/
   wing-it/               story events: a checklist over a film scene
   spin-count/            beats and marks: a spin counter
   handwash-song/         word timings: karaoke
+projects/                yours, made by `npm run new` (media gitignored)
 prompts/                 00-brief.md, generate/ (steps 1-4), edit/ (steps 5-7)
 scripts/                 Node, no dependencies, each with --help
 skills/character-video/  the Claude Code skill
+templates/starter/       the blank project `npm run new` copies
+tests/                   `npm test`: no media, no network, run by CI
 ```
 
 Each example holds the edit (`build/index.template.htm`), a generated `index.html`, its timing data and `CREDITS.md`.

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  HYPERFRAMES_NO_TELEMETRY: "1"
+
+jobs:
+  checks:
+    name: Scripts, builds and links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+
+  starter:
+    name: Starter project lints
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - run: node scripts/new-project.mjs ci-starter
+      - run: node scripts/probe.mjs projects/ci-starter/assets/footage.mp4 projects/ci-starter/assets/music.mp3
+      - run: npx -y hyperframes@0.8.143 lint projects/ci-starter

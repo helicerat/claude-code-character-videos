@@ -20,6 +20,20 @@ examples/*/assets/**/*.webp
 examples/*/assets/**/*.part
 examples/*/assets/gsap.min.js
 
+# Projects from `npm run new`: the same media rules as the examples.
+projects/*/assets/**/*.mp4
+projects/*/assets/**/*.mov
+projects/*/assets/**/*.webm
+projects/*/assets/**/*.mp3
+projects/*/assets/**/*.wav
+projects/*/assets/**/*.m4a
+projects/*/assets/**/*.png
+projects/*/assets/**/*.jpg
+projects/*/assets/**/*.jpeg
+projects/*/assets/**/*.webp
+projects/*/assets/**/*.part
+projects/*/assets/gsap.min.js
+
 # Small text files that ARE committed (listed so a broader rule never hides them)
 !examples/*/assets/.gitkeep
 !examples/*/assets/whisper_verbose.json

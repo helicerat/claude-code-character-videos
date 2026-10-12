@@ -35,7 +35,7 @@ Entry A follows `prompts/generate/`, which is written from provider docs. Before
 - Probe every input and output with `node scripts/probe.mjs`. Never assume a sample rate.
 - Content (`docs/01-idea.md`, section 6): an original character, no real people or existing characters, no studio or franchise names in prompts, no products in anything aimed at children, no view counts the user did not measure, and the AI label each platform needs.
 
-The project folder is `examples/<name>` unless the user picks another. Its timing data is `transcript.json`, `marks.json` plus `beats/`, or `events.json` (with `shots.json` for a film cut shot by shot).
+The project folder is `projects/<name>` unless the user picks another. Create it with `npm run new -- <name>`: a starter edit that lints and renders on placeholder media, with marks in `marks.json` (the `/*MARKS*/[]` placeholder). Replace the media and the edit; keep the build and the contract. Its timing data is `transcript.json`, `marks.json` plus `beats/`, or `events.json` (with `shots.json` for a film cut shot by shot).
 
 ## Step 0: choose the entry point
 
